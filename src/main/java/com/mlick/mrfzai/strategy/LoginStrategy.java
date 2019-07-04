@@ -1,0 +1,85 @@
+package com.mlick.mrfzai.strategy;
+
+import com.mlick.mrfzai.core.AutoStrategy;
+import com.mlick.mrfzai.utils.OpenCvUtils;
+import com.mlick.mrfzai.utils.RandomUtils;
+import com.mlick.mrfzai.utils.ShellUtils;
+import org.opencv.core.Point;
+
+import static com.mlick.mrfzai.utils.ShellUtils.adbPath;
+
+/**
+ * @author lixiangxin
+ * @date 2019/6/10 23:54
+ * <p>
+ * 登陆 逻辑
+ **/
+public class LoginStrategy extends AutoStrategy {
+
+  @Override
+  public void exec() {
+
+    Point point;
+
+    // 点击开始 按钮
+    while ((point = OpenCvUtils.findStart()) != null) {
+      ShellUtils.executePoint(point);
+      ShellUtils.sleepTime(5);
+    }
+
+    point = OpenCvUtils.findStartWake();
+
+    if (point != null) {
+      System.out.println("发现【开始唤醒】...");
+      ShellUtils.executePoint(point);
+      ShellUtils.sleepTime(RandomUtils.getRandom(6, 8));
+    }
+
+    point = OpenCvUtils.findNextWhiteAction();
+    Point loginPoint = OpenCvUtils.findLoginAccountBtn();
+
+    if (point == null && loginPoint == null) {
+      System.out.println("登陆可能成功");
+      return;
+    }
+
+    if (point != null) {
+      System.out.println("发现【登陆失败】或者【更新】...");
+      ShellUtils.executePoint(point);
+      ShellUtils.sleepTime(RandomUtils.getRandom(1, 2));
+
+    }
+
+    loginPoint = OpenCvUtils.findLoginAccountBtn();
+
+    while (loginPoint == null) {
+      System.out.println("等待检测【账号登陆】...");
+      loginPoint = OpenCvUtils.findLoginAccountBtn();
+      ShellUtils.sleepTime(5);
+    }
+
+    System.out.println("发现【账号登陆】...");
+    ShellUtils.executePoint(loginPoint);
+
+    loginPoint = OpenCvUtils.findImage("login_mlick_input.png");
+
+    if (loginPoint != null){
+      loginPoint = OpenCvUtils.findImage("input_password.png");
+      ShellUtils.executePoint(loginPoint);
+
+      OpenCvUtils.findAndAction("input_password.png");
+
+      ShellUtils.execute(adbPath, "shell", "input", "text", "123456lxx");
+
+      OpenCvUtils.findAndAction("enter_btn.png");
+
+      OpenCvUtils.findAndAction("login_btn.png");
+    }
+
+
+
+
+
+  }
+
+}
