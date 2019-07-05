@@ -80,7 +80,7 @@ public class PicOpenCvTest {
     Imgcodecs.imwrite("D:\\tmp\\match.jpg", g_src);
   }
 
-  public static void main(String[] args) {
+  public static void main2(String[] args) {
 
     System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
     Mat source = null;
@@ -137,4 +137,8 @@ public class PicOpenCvTest {
     System.out.println("Complated.");
   }
 
+
+  public static void main(String[] args) {
+
+  }
 }

@@ -178,9 +178,9 @@ public class OpenCvUtils {
     }
   }
 
-  public static void main(String[] args) {
+  public static void main2(String[] args) {
 
-    Point b = findImage("D:\\tmp\\screen3_1.png", "D:\\tmp\\START.png");
+    Point b = findImage("D:\\tmp\\bg\\screen3_1.png", "D:\\tmp\\START.png");
     System.out.println(b);
 
     b = findImage("D:\\tmp\\login.png", "D:\\tmp\\start_wake.png");
@@ -200,10 +200,9 @@ public class OpenCvUtils {
   }
 
 
-//  @Test
-//  public void t1() {
-//    OpenCvUtils.findImage("D:\\tmp\\screen.png", "D:\\tmp\\building_result.png", "D:\\tmp\\match.png");
-//  }
+  public static void main(String[] args) {
+    OpenCvUtils.findImage("D:\\tmp\\bg\\screen.png", "D:\\tmp\\RES\\START.png");//, "D:\\tmp\\bh\\match2.png");
+  }
 
 
 }
