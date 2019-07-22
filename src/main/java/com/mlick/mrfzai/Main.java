@@ -23,7 +23,7 @@ public class Main {
 
   public static void main(String[] args) {
 
-    adbPath = String.format(adbPath, args[0]);
+    adbPath = String.format(adbPath, args.length == 0 ? "adb1036" : args[0]);
 
     ArrayList<String> connectedDevices = ShellUtils.getConnectedDevices();
     System.out.println(connectedDevices);
@@ -45,6 +45,8 @@ public class Main {
       System.out.println("=======  1 登陆  ====");
       System.out.println("=======  2 首页  ====");
       System.out.println("=======  3 邮件  ====");
+      System.out.println("=======  4 经验  ====");
+      System.out.println("=======  5 金币  ====");
       System.out.println("=======  6 代理  ====");
       System.out.println("=====================");
 
@@ -65,6 +67,12 @@ public class Main {
           break;
         case 3:
           autoStrategy = new AcceptEmailStrategy();
+          break;
+        case 4: //经验
+          autoStrategy = new JumpChapterStrategy(1);
+          break;
+        case 5: //龙门币
+          autoStrategy = new JumpChapterStrategy(2);
           break;
         case 6:
           autoStrategy = new ProxyActionStrategy();

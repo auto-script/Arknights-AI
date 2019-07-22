@@ -25,8 +25,12 @@ public class ShellUtils {
 
   public static String screenPath = "screen.png";
 
-  public static void screenCap() throws IOException {
-    screenCap(screenPath);
+  public static void screenCap() {
+    try {
+      screenCap(screenPath);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   public static synchronized void screenCap(String saveFile) throws IOException {
@@ -38,7 +42,8 @@ public class ShellUtils {
     File pullFile = new File(saveFile);
     result = execute(false, adbPath, "pull", "/sdcard/screen.png", pullFile.getAbsolutePath());
     if (!result) {
-      throw new RuntimeException("手机分辨率检测失败，请检查电脑与手机连接和手机设置。");
+      System.err.println("手机分辨率检测失败，请检查电脑与手机连接和手机设置。");
+      return;
     }
 
     BufferedImage src = ImageIO.read(new FileInputStream(pullFile));
@@ -50,9 +55,6 @@ public class ShellUtils {
     ImageIO.write(des1, "png", pullFile);
   }
 
-  private static boolean executeForNoLog(String... cmd) {
-    return false;
-  }
 
   public static ArrayList<String> getConnectedDevices() {
     ArrayList<String> devices = new ArrayList<>();
@@ -85,16 +87,20 @@ public class ShellUtils {
     return String.format("input keyevent %d", 26);
   }
 
-  public static String swipePhone(int sx, int sy, int ex, int ey) {
-    return String.format("input touchscreen swipe %d %d %d %d", sx, sy, ex, ey);
+  public static void swipePhone(int sx, int sy, int ex, int ey) {
+    executeCommand(String.format("input touchscreen swipe %d %d %d %d", sx, sy, ex, ey));
   }
 
-  public static String tapPhone(Point point) {
+  public static String getTapPhone(Point point) {
     return String.format("input tap %f %f", point.x, point.y);
   }
 
-  public static String tapPhone(int x, int y) {
+  public static String getTapPhone(int x, int y) {
     return String.format("input tap %d %d", x, y);
+  }
+
+  public static void tapPhone(int x, int y) {
+    executeCommand(String.format("input tap %d %d", x, y));
   }
 
 
@@ -140,12 +146,16 @@ public class ShellUtils {
     if (point == null) {
       return false;
     }
-    return execute(adbPath, "shell", tapPhone(point));
+    return execute(adbPath, "shell", getTapPhone(point));
   }
 
 
   public static boolean execute(String... cmd) {
     return execute(true, cmd);
+  }
+
+  public static boolean executeCommand(String cmd) {
+    return execute(adbPath, "shell", cmd);
   }
 
   public static boolean execute(boolean show, String... cmd) {
@@ -187,12 +197,10 @@ public class ShellUtils {
 
 
   public static void sleepTime(int i) {
-    for (int j = 0; j < i; j++) {
-      try {
-        TimeUnit.SECONDS.sleep(1);
-      } catch (InterruptedException e) {
-        e.printStackTrace();
-      }
+    try {
+      TimeUnit.SECONDS.sleep(i);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
     }
   }
 

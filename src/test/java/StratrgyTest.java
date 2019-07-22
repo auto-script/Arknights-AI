@@ -26,16 +26,16 @@ public class StratrgyTest {
 
     Point point = OpenCvUtils.findProxyStartAction();
 
-    execute(adbPath, "shell", tapPhone(1128, 660));
+    execute(adbPath, "shell", getTapPhone(1128, 660));
     sleepTime(getRandom(5, 8));
-    execute(adbPath, "shell", tapPhone(1128, 660));
+    execute(adbPath, "shell", getTapPhone(1128, 660));
     sleepTime(getRandom(5, 8));
-    execute(adbPath, "shell", tapPhone(1128, 660));
+    execute(adbPath, "shell", getTapPhone(1128, 660));
     sleepTime(getRandom(5, 8));
 
     // 开始行动 2
     System.out.println("开始行动 2");
-    execute(adbPath, "shell", tapPhone(1128, 500));
+    execute(adbPath, "shell", getTapPhone(1128, 500));
 
     int waitMinute = getRandom(120, 180);
 
@@ -43,12 +43,12 @@ public class StratrgyTest {
     sleepTime2(waitMinute);
 
     // 可能出现 失误
-//    execute(adbPath, "shell", tapPhone(1155, 465));
+//    execute(adbPath, "shell", getTapPhone(1155, 465));
 //    sleepTime(3);
 
     // 退出结算页面
     System.out.println("退出结算页面");
-    execute(adbPath, "shell", tapPhone(1128, 660));
+    execute(adbPath, "shell", getTapPhone(1128, 660));
     sleepTime(getRandom(10, 20));
 
   }
@@ -66,8 +66,7 @@ public class StratrgyTest {
 
   @Test
   public void loginTest() {
-    AutoStrategy autoStrategy = new com.mlick.mrfzai.strategy.LoginStrategy();
-    autoStrategy.exec();
+    FactoryUtil.exec(LoginStrategy.class);
   }
 
   @Test
@@ -89,29 +88,124 @@ public class StratrgyTest {
   }
 
   @Test
-  public void testBuild(){
-    AutoStrategy autoStrategy = new BuildStrategy();
-    autoStrategy.exec();
-  }
-
-  @Test
-  public void testAutoLogin1() {
-    OpenCvUtils.findAndAction("input_password.png");
-
-    ShellUtils.execute(adbPath, "shell", "input", "text", "301415926l");
-
-    OpenCvUtils.findAndAction("enter_btn.png");
-
-    OpenCvUtils.findAndAction("login_btn.png");
-
-  }
-
-  @Test
-  public void allAuto(){
-    FactoryUtil.exec(LauncyStragery.class);
-    FactoryUtil.exec(LoginStrategy.class);
-    FactoryUtil.exec(IndexStrategy.class);
-    FactoryUtil.exec(AcceptEmailStrategy.class);
+  public void testBuild() {
     FactoryUtil.exec(BuildStrategy.class);
   }
+
+  @Test
+  public void testAutoLogin() {
+    new LoginStrategy().autoLogin();
+  }
+
+  @Test
+  public void exit(){
+    FactoryUtil.exec(ExitStragery.class);
+  }
+
+  @Test
+  public void proxyStrategy(){
+    FactoryUtil.exec(ProxyActionStrategy.class);
+  }
+
+  @Test
+  public void allAuto() {
+    FactoryUtil.exec(LoginStrategy.class);
+    FactoryUtil.exec(IndexStrategy.class);
+  }
+
+
+  @Test
+  public void dayTask(){
+
+    //处理可能出现其它情况 随机点击一处屏幕
+    ShellUtils.tapPhone(255, 255);
+    ShellUtils.sleepTime(3);
+
+    allAuto();
+
+    FactoryUtil.exec(new JumpChapterStrategy(1));
+//    FactoryUtil.exec(new ProxyActionStrategy(10));
+//
+//    FactoryUtil.exec(new JumpChapterStrategy(2));
+    FactoryUtil.exec(ProxyActionStrategy.class);
+  }
+
+  @Test
+  public void dayTask2(){
+    allAuto();
+    FactoryUtil.exec(BuildStrategy.class);
+  }
+
+  @Test
+  public void IWantMoreMoney(){
+
+    //处理可能出现其它情况 随机点击一处屏幕
+    ShellUtils.tapPhone(255, 255);
+    ShellUtils.sleepTime(3);
+
+//    allAuto();
+    FactoryUtil.exec(new JumpChapterStrategy(2));
+    FactoryUtil.exec(ProxyActionStrategy.class);
+  }
+
+  @Test
+  public void IWantExperience(){
+//    allAuto();
+    FactoryUtil.exec(new JumpChapterStrategy(1));
+    FactoryUtil.exec(ProxyActionStrategy.class);
+  }
+
+  /**
+   * 固定刷 某件物品
+   */
+  @Test
+  public void dayTask4(){
+    FactoryUtil.exec(new ProxyActionStrategy(5));
+  }
+
+
+
+
+  @Test
+  public void t1(){
+    ShellUtils.sleepTime(5);
+    ShellUtils.swipePhone(255, 255, 200, 255);
+  }
+
+
+  @Test
+  public void t2(){
+
+//    Point andAction = OpenCvUtils.findAndAction("home_fight.png");
+//    if (andAction == null) {
+//
+//      OpenCvUtils.findAndAction("home.png");
+//      ShellUtils.sleepTime(3);
+//      OpenCvUtils.findAndAction("fight.png");
+//      ShellUtils.sleepTime(8);
+//    }
+//
+//    OpenCvUtils.findAndAction("goods.png");
+//
+//    ShellUtils.swipePhone(255, 255, 155, 255);
+
+    Point point = OpenCvUtils.findImage("fight_money.png");
+    ShellUtils.executePoint(point);
+
+    ShellUtils.screenCap();
+
+  }
+
+  @Test
+  public void t3(){
+
+    FactoryUtil.exec(ExitStragery.class);
+    FactoryUtil.exec(LauncyStragery.class);
+
+    allAuto();
+
+    ShellUtils.screenCap();
+  }
+
+
 }

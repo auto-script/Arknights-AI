@@ -1,5 +1,6 @@
 package com.mlick.mrfzai.utils;
 
+import com.mlick.mrfzai.core.Action;
 import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
@@ -80,6 +81,10 @@ public class OpenCvUtils {
     return findImage("back_white_btn.png");
   }
 
+  public static Point findBlackBackBtn() {
+    return findImage("back_black_btn.png");
+  }
+
   public static Point findLoginAccountBtn() {
     return findImage("login_account_btn.png");
   }
@@ -96,11 +101,7 @@ public class OpenCvUtils {
 
   public static Point findImage(String templateImg) {
 
-    try {
-      ShellUtils.screenCap();
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
+    ShellUtils.screenCap();
 
     String path = Objects.requireNonNull(Paths.get("./resources/" + templateImg).toFile()).getAbsolutePath();
     System.out.println(path);
@@ -112,10 +113,14 @@ public class OpenCvUtils {
   }
 
   public static Point findImage(String sourceImg, String templateImg, String resultImgFile) {
+    Action action = Action.INSTANCE.getAction(templateImg);
+    return findImage(sourceImg,action,resultImgFile);
+  }
 
+  public static Point findImage(String sourceImg, Action templateImg, String resultImgFile) {
 
     Mat sourceMat = Imgcodecs.imread(sourceImg);
-    Mat templateMat = Imgcodecs.imread(templateImg);
+    Mat templateMat = Imgcodecs.imread(templateImg.getImg());
 
     if (sourceMat.width() < templateMat.width() || sourceMat.height() < templateMat.height()) {
       System.err.println("The template image is larger than the source image. Ensure that the width and/or height of the image you are trying to find do not exceed the dimensions of the source image.");
@@ -134,11 +139,11 @@ public class OpenCvUtils {
     double accuracy = minMaxLocRes.maxVal;
 
     System.out.println(accuracy);
+
     if (accuracy < DESIRED_ACCURACY) {
-      System.err.println(String.format(
-          "Failed to find template image in the source image. The accuracy was %.2f and the desired accuracy was %.2f",
-          accuracy,
-          DESIRED_ACCURACY));
+      ShellUtils.sleepTime(1);
+      System.err.println(templateImg.getImg()+"=>【"+templateImg.getName()+"】未找到=>"+accuracy);
+      ShellUtils.sleepTime(1);
       return null;
     }
 
@@ -147,8 +152,8 @@ public class OpenCvUtils {
           "Image find result (MinMaxLocResult) was invalid. This usually happens when the source image is covered in one solid color.");
       return null;
     }
-    Point matchLocation = minMaxLocRes.maxLoc;
 
+    Point matchLocation = minMaxLocRes.maxLoc;
 
     Point resultPoint = new Point(matchLocation.x + templateMat.width() / 2.0f, matchLocation.y + templateMat.height() / 2.0f);
 

@@ -1,3 +1,5 @@
+import com.mlick.mrfzai.utils.OpenCvUtils;
+import com.mlick.mrfzai.utils.ShellUtils;
 import org.junit.Test;
 import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
@@ -140,5 +142,6 @@ public class PicOpenCvTest {
 
   public static void main(String[] args) {
 
+    OpenCvUtils.findImage(ShellUtils.screenPath,"home.png","home_t.png");
   }
 }

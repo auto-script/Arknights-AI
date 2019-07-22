@@ -27,8 +27,8 @@ public class AcceptEmailStrategy extends AutoStrategy {
       ShellUtils.executePoint(point);
     }
 
-    System.out.println("删除所有已读邮件");
-    ShellUtils.executePoint(OpenCvUtils.findDeleteEmail());
+//    System.out.println("删除所有已读邮件");
+//    ShellUtils.executePoint(OpenCvUtils.findDeleteEmail());
 
     System.out.println("返回");
     ShellUtils.executePoint(OpenCvUtils.findBackBtn());

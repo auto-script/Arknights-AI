@@ -18,4 +18,8 @@ public class FactoryUtil {
       e.printStackTrace();
     }
   }
+
+  public static void exec(AutoStrategy t) {
+    t.exec();
+  }
 }
