@@ -21,7 +21,7 @@ public class LauncyStragery extends AutoStrategy {
         adbPath, "shell", "am start -n com.hypergryph.arknights/com.u8.sdk.U8UnityContext");
     ShellUtils.sleepTime(5);
 
-    Point start = null;;
+    Point start = null;
 
     // 点击开始 按钮  重试 3 次
     for (int i = 0; i < 3 && (start  = OpenCvUtils.findStart()) == null; i++) {
@@ -31,6 +31,8 @@ public class LauncyStragery extends AutoStrategy {
       Point nextWhiteAction = OpenCvUtils.findNextWhiteAction();
       if (nextWhiteAction != null) {
         ShellUtils.executePoint(nextWhiteAction);
+      }else if (OpenCvUtils.findLoginAccountBtn() != null){
+        break;
       }
     }
 

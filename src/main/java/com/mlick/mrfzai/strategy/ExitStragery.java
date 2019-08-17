@@ -1,6 +1,7 @@
 package com.mlick.mrfzai.strategy;
 
 import com.mlick.mrfzai.core.AutoStrategy;
+import com.mlick.mrfzai.utils.NoxUtils;
 import com.mlick.mrfzai.utils.ShellUtils;
 
 import static com.mlick.mrfzai.utils.ShellUtils.adbPath;
@@ -11,10 +12,15 @@ import static com.mlick.mrfzai.utils.ShellUtils.adbPath;
  **/
 public class ExitStragery extends AutoStrategy {
 
-  @Override
-  public void exec() {
-    ShellUtils.executeByResult(
-        adbPath, "shell", "am force-stop com.hypergryph.arknights");
-  }
+    @Override
+    public void exec() {
+        ShellUtils.executeByResult(
+                adbPath, "shell", "am force-stop com.hypergryph.arknights");
+
+        NoxUtils.shutDown();
+
+        System.exit(0);
+        
+    }
 
 }

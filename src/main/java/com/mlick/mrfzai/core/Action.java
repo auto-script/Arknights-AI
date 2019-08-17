@@ -45,12 +45,13 @@ public enum Action {
 
   public Action getAction(String img) {
     for (Action action : Action.values()) {
-      if ((action.img + ".png").equals(img)) {
+      if (action.img.equals(img)) {
         return action;
       }
     }
     Action instance = Action.INSTANCE;
     instance.img = img;
+    instance.name = "待添加ENUM";
     return instance;
   }
 

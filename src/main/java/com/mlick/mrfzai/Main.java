@@ -2,38 +2,23 @@ package com.mlick.mrfzai;
 
 import com.mlick.mrfzai.core.AutoStrategy;
 import com.mlick.mrfzai.strategy.*;
-import com.mlick.mrfzai.utils.ShellUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Scanner;
-
-import static com.mlick.mrfzai.utils.ShellUtils.adbPath;
 
 /**
  * @author lixiangxin
  * @date 2019/6/1 16:38
  */
-@SuppressWarnings("AlibabaRemoveCommentedCode")
 public class Main {
 
   public static void main(String[] args) {
 
-    adbPath = String.format(adbPath, args.length == 0 ? "adb1036" : args[0]);
-
-    ArrayList<String> connectedDevices = ShellUtils.getConnectedDevices();
-    System.out.println(connectedDevices);
-    if (connectedDevices.isEmpty()) {
-      System.out.println("devices is empty");
-
-      ShellUtils.executeByResult(adbPath, "connect 127.0.0.1");
-
-      return;
-    }
+    MainAuto.getAdb(args);
 
     Scanner scanner = new Scanner(System.in);
 
@@ -66,7 +51,7 @@ public class Main {
           autoStrategy = new IndexStrategy();
           break;
         case 3:
-          autoStrategy = new AcceptEmailStrategy();
+          autoStrategy = new EmailStrategy();
           break;
         case 4: //经验
           autoStrategy = new JumpChapterStrategy(1);

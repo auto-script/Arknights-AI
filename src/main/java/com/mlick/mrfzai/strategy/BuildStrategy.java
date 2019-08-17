@@ -76,6 +76,16 @@ public class BuildStrategy extends AutoStrategy {
       ShellUtils.sleepTime(3);
       ShellUtils.executePoint(OpenCvUtils.findBlackBackBtn());
     }
+
+    // TODO  员工信任
+
+
+    // TODO 线索收集
+
+
+    // TODO 干员疲劳
+
+
   }
 
 
