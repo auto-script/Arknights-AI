@@ -27,8 +27,7 @@ public class JumpChapterStrategy extends AutoStrategy {
     public void exec() {
 
         Point andAction = OpenCvUtils.findAndAction("home_fight.png");
-        if (andAction == null) {
-
+        if (stage != 0 && andAction == null) {
             OpenCvUtils.findAndAction("home.png");
             ShellUtils.sleepTime(3);
             OpenCvUtils.findAndAction("fight.png");
@@ -38,6 +37,8 @@ public class JumpChapterStrategy extends AutoStrategy {
         switch (stage) {
 
             case 0:// 首页
+                OpenCvUtils.findAndAction("home.png");
+                ShellUtils.sleepTime(3);
                 OpenCvUtils.findAndAction("home_index.png");
                 break;
             case 1:// 跳转到经验

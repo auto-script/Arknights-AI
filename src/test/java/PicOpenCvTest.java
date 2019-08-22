@@ -12,7 +12,7 @@ import org.opencv.imgproc.Imgproc;
 public class PicOpenCvTest {
 
   //
-//  @Test
+//  //@Test
 //  public void t1() {
 //    System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 //    Mat source, template;
@@ -34,7 +34,7 @@ public class PicOpenCvTest {
 //    Highgui.imwrite("C:\\Users\\Administrator\\Desktop\\new.png", source);
 //  }
 
-  @Test
+  //@Test
   public void t2() {
     String filename = "C:\\Users\\Administrator\\Desktop\\161272e10062b204.png";
     System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
@@ -45,7 +45,7 @@ public class PicOpenCvTest {
   /**
    * 320
    */
-  @Test
+  //@Test
   public void t3() {
     System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 

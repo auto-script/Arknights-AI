@@ -39,7 +39,7 @@ public class StratrgyTest {
         int waitMinute = getRandom(120, 180);
 
         // 等待 战斗结束
-        sleepTime2(waitMinute);
+        sleepTime(waitMinute);
 
         // 可能出现 失误
 //    execute(adbPath, "shell", getTapPhone(1155, 465));
@@ -55,63 +55,63 @@ public class StratrgyTest {
         adbPath = String.format(adbPath, "adb1036");
     }
 
-    @Test
+    //@Test
     public void screenCap() throws IOException {
         ShellUtils.screenCap();
     }
 
 
-    @Test
+    //@Test
     public void loginTest() {
         FactoryUtil.exec(LoginStrategy.class);
     }
 
-    @Test
+    //@Test
     public void indexTest() {
         AutoStrategy autoStrategy = new com.mlick.mrfzai.strategy.IndexStrategy();
         autoStrategy.exec();
     }
 
-    @Test
+    //@Test
     public void acceptEmail() {
         AutoStrategy autoStrategy = new EmailStrategy();
         autoStrategy.exec();
     }
 
-    @Test
+    //@Test
     public void devices() throws IOException {
         ShellUtils.executeByResult(adbPath, "connect 106.12.196.97");
         ShellUtils.screenCap();
     }
 
-    @Test
+    //@Test
     public void testBuild() {
         FactoryUtil.exec(BuildStrategy.class);
     }
 
-    @Test
+    //@Test
     public void testAutoLogin() {
         new LoginStrategy().autoLogin();
     }
 
-    @Test
+    //@Test
     public void exit() {
         FactoryUtil.exec(ExitStragery.class);
     }
 
-    @Test
+    //@Test
     public void proxyStrategy() {
         FactoryUtil.exec(ProxyActionStrategy.class);
     }
 
-    @Test
+    //@Test
     public void allAuto() {
         FactoryUtil.exec(LoginStrategy.class);
         FactoryUtil.exec(IndexStrategy.class);
     }
 
 
-    @Test
+    //@Test
     public void dayTask() {
 
         //处理可能出现其它情况 随机点击一处屏幕
@@ -126,13 +126,13 @@ public class StratrgyTest {
         FactoryUtil.exec(ProxyActionStrategy.class);
     }
 
-    @Test
+    //@Test
     public void dayTask2() {
         allAuto();
         FactoryUtil.exec(BuildStrategy.class);
     }
 
-    @Test
+    //@Test
     public void IWantMoreMoney() {
 
         //处理可能出现其它情况 随机点击一处屏幕
@@ -144,7 +144,7 @@ public class StratrgyTest {
         FactoryUtil.exec(ProxyActionStrategy.class);
     }
 
-    @Test
+    //@Test
     public void IWantExperience() {
         allAuto();
         FactoryUtil.exec(new JumpChapterStrategy(1));
@@ -154,19 +154,19 @@ public class StratrgyTest {
     /**
      * 固定刷 某件物品
      */
-    @Test
+    //@Test
     public void dayTask4() {
         FactoryUtil.exec(new ProxyActionStrategy(100));
     }
 
 
-    @Test
+    //@Test
     public void t1() {
         ShellUtils.swipePhone(255, 255, 200, 255);
     }
 
 
-    @Test
+    //@Test
     public void t2() {
 
 //    Point andAction = OpenCvUtils.findAndAction("home_fight.png");
@@ -189,7 +189,7 @@ public class StratrgyTest {
 
     }
 
-    @Test
+    //@Test
     public void t3() {
 
         FactoryUtil.exec(ExitStragery.class);
@@ -208,14 +208,14 @@ public class StratrgyTest {
     }
 
 
-    @Test
+    //@Test
     public void t4() {
         Action action = Action.INSTANCE.getAction("start_wake.png");
         System.out.println(action);
     }
 
 
-    @Test
+    //@Test
     public void t5() {
 
 
@@ -232,19 +232,24 @@ public class StratrgyTest {
     }
 
 
-    @Test
+    //@Test
     public void taskTest() {
         FactoryUtil.exec(TaskStrategy.class);
     }
 
-    @Test
+    //@Test
     public void taskPurchasing() {
         FactoryUtil.exec(PurchasingStrategy.class);
     }
 
 
-    @Test
+    //@Test
     public void testActivity() {
         FactoryUtil.exec(ActivityStrategy.class);
+    }
+
+    //@Test
+    public void testJumpHome(){
+      FactoryUtil.exec(new JumpChapterStrategy(0));
     }
 }

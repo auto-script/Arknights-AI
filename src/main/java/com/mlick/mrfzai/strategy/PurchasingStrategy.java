@@ -13,7 +13,7 @@ public class PurchasingStrategy extends AutoStrategy {
 
         OpenCvUtils.loopFind("caigou_center");
 
-        OpenCvUtils.loopFind("jiaoyisuo");
+        OpenCvUtils.loopFind("jiaoyisuo",5);
 
         OpenCvUtils.loopFind("get_credit", true);
 

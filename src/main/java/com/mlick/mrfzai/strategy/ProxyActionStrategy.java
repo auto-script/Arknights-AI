@@ -95,7 +95,7 @@ public class ProxyActionStrategy extends AutoStrategy implements AutoProxy {
         }
 
         // 等待 战斗结束
-        sleepTime2(RandomUtils.getRandom(120, 180));
+        sleepTime(RandomUtils.getRandom(120, 180));
         // 退出结算页面
         System.out.println("退出结算页面");
         point = OpenCvUtils.findEndAction();
