@@ -50,7 +50,11 @@ public class MainAuto {
     if (connectedDevices.isEmpty()) {
       System.out.println("devices is empty");
 
-      ShellUtils.executeByResult(adbPath, "connect 127.0.0.1");
+      ShellUtils.executeByResult(adbPath, "connect 127.0.0.1:62001");
+    }
+
+    if (connectedDevices != null && connectedDevices.size() > 1){
+      ShellUtils.executeByResult(adbPath, "connect 127.0.0.1:62001");
     }
   }
 }

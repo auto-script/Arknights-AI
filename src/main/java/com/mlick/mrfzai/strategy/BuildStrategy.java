@@ -86,6 +86,9 @@ public class BuildStrategy extends AutoStrategy {
     // TODO 干员疲劳
 
 
+    /* 退出基建*/
+    ShellUtils.sleepTime(3);
+    ShellUtils.executePoint(OpenCvUtils.findBlackBackBtn());
   }
 
 

@@ -43,12 +43,10 @@ public class JumpChapterStrategy extends AutoStrategy {
                 break;
             case 1:// 跳转到经验
                 execJump("fight_experience.png", "LS-5.png");
-                OpenCvUtils.findAndAction("un_proxy_.png");
                 break;
 
             case 2:// 跳转到龙门币
                 execJump("fight_money.png", "CE-5.png");
-                OpenCvUtils.findAndAction("un_proxy_.png");
                 break;
 
             case 3:// 跳转到基站

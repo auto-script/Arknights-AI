@@ -13,10 +13,11 @@ public class ActivityStrategy extends AutoStrategy {
     @Override
     public void exec() {
 
-        OpenCvUtils.loopFind("limit_time_active");
+        OpenCvUtils.loopFind("limit_time_active",true);
 
         OpenCvUtils.loopFind("receive", true);
 
         OpenCvUtils.loopFind("exit_btn", true);
+
     }
 }

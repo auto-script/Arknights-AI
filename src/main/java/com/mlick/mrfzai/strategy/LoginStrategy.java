@@ -25,8 +25,9 @@ public class LoginStrategy extends AutoStrategy {
       return;
     }
 
+    int count = 0;
     // 点击开始 按钮
-    while ((point = OpenCvUtils.findStart()) == null) {
+    while ((point = OpenCvUtils.findStart()) == null && count ++ < 3) {
       OpenCvUtils.findImage("yes_btn");
       ShellUtils.sleepTime(5);
     }
@@ -34,7 +35,7 @@ public class LoginStrategy extends AutoStrategy {
 
     ShellUtils.sleepTime(5);
 
-    point = OpenCvUtils.loopFind("start_wake.png");
+    point = OpenCvUtils.loopFind("start_wake.png",5);
 
     if (point != null) {
       System.out.println("发现【开始唤醒】...");

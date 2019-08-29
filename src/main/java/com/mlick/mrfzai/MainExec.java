@@ -1,14 +1,10 @@
 package com.mlick.mrfzai;
 
-import com.mlick.mrfzai.core.Constants;
 import com.mlick.mrfzai.strategy.*;
 import com.mlick.mrfzai.utils.FactoryUtil;
 import com.mlick.mrfzai.utils.NoxUtils;
 import com.mlick.mrfzai.utils.ShellUtils;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 
@@ -37,7 +33,13 @@ public class MainExec {
       NoxUtils.startUp();
       ShellUtils.sleepTime(3);
       ShellUtils.sleepTime(50);
+
+      FactoryUtil.exec(LauncyStragery.class);
+
+      ShellUtils.sleepTime(10);
     }
+
+    MainAuto.getAdb(args);
 
     FactoryUtil.exec(LoginStrategy.class);
 
@@ -50,9 +52,19 @@ public class MainExec {
     FactoryUtil.exec(PurchasingStrategy.class);
     FactoryUtil.exec(BuildStrategy.class);
 
+
+    /** 常规刷图 */
     FactoryUtil.exec(new JumpChapterStrategy(getType()));
     FactoryUtil.exec(ProxyActionStrategy.class);
 
+    /** 刷活动图*/
+//    FactoryUtil.exec(ActivityHuoLanZhiXinStrategy.get("OF-7"));
+//    FactoryUtil.exec(ProxyActionStrategy.count(5));
+//    FactoryUtil.exec(ActivityHuoLanZhiXinStrategy.get("OF-8"));
+//    FactoryUtil.exec(ProxyActionStrategy.class);
+
+    FactoryUtil.exec(ActivityHuoLanZhiXinStrategy.get("OF-F4"));
+    FactoryUtil.exec(ProxyActionStrategy.class);
 
     FactoryUtil.exec(TaskStrategy.class);
     FactoryUtil.exec(PurchasingStrategy.class);

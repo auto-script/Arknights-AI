@@ -1,7 +1,9 @@
+import com.mlick.mrfzai.MainAuto;
 import com.mlick.mrfzai.core.Action;
 import com.mlick.mrfzai.core.AutoStrategy;
 import com.mlick.mrfzai.strategy.*;
 import com.mlick.mrfzai.utils.FactoryUtil;
+import com.mlick.mrfzai.utils.NoxUtils;
 import com.mlick.mrfzai.utils.OpenCvUtils;
 import com.mlick.mrfzai.utils.ShellUtils;
 import org.junit.Before;
@@ -55,7 +57,7 @@ public class StratrgyTest {
         adbPath = String.format(adbPath, "adb1036");
     }
 
-    //@Test
+    @Test
     public void screenCap() throws IOException {
         ShellUtils.screenCap();
     }
@@ -251,5 +253,26 @@ public class StratrgyTest {
     //@Test
     public void testJumpHome(){
       FactoryUtil.exec(new JumpChapterStrategy(0));
+    }
+
+
+    @Test
+    public void tA2(){
+        FactoryUtil.exec(ActivityHuoLanZhiXinStrategy.get("OF-7"));
+        FactoryUtil.exec(ProxyActionStrategy.class);
+        FactoryUtil.exec(ActivityHuoLanZhiXinStrategy.get("OF-F3"));
+        FactoryUtil.exec(ProxyActionStrategy.class);
+    }
+
+
+    @Test
+    public void startUp() throws InterruptedException {
+        NoxUtils.startUp();
+        Thread.currentThread().join();
+    }
+
+    @Test
+    public void getDevices(){
+        MainAuto.getAdb(new String[]{});
     }
 }
