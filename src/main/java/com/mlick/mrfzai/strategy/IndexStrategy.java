@@ -21,6 +21,11 @@ public class IndexStrategy extends AutoStrategy {
       ShellUtils.executePoint(point1);
     }
 
+    OpenCvUtils.loopFindIfNullExit("exit_btn");
+
+    OpenCvUtils.loopFindIfNullExit("next_btn");
 
   }
+
+
 }

@@ -89,6 +89,8 @@ public class ProxyActionStrategy extends AutoStrategy implements AutoProxy {
       ShellUtils.sleepTime(2);
       System.err.println("未找到开始行动 1");
       ShellUtils.sleepTime(2);
+      maxCount = 0;
+      System.err.println("退出执行策略");
       return;
     }
 

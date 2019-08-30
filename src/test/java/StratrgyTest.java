@@ -247,7 +247,7 @@ public class StratrgyTest {
 
     //@Test
     public void testActivity() {
-        FactoryUtil.exec(ActivityStrategy.class);
+        FactoryUtil.exec(ActivityLimitTimeStrategy.class);
     }
 
     //@Test

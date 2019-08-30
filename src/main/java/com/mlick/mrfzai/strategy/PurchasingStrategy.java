@@ -15,7 +15,7 @@ public class PurchasingStrategy extends AutoStrategy {
 
         OpenCvUtils.loopFind("jiaoyisuo",5);
 
-        OpenCvUtils.loopFind("get_credit", true);
+        OpenCvUtils.loopFindIfNullExit("get_credit");
 
         OpenCvUtils.loopFind("back_black_btn");
 
