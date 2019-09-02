@@ -54,24 +54,27 @@ public class MainExec {
 
 
         /** 常规刷图 */
-//    FactoryUtil.exec(new JumpChapterStrategy(getType()));
-//    FactoryUtil.exec(ProxyActionStrategy.class);
+        FactoryUtil.exec(new JumpChapterStrategy(getType()));
+        FactoryUtil.exec(ProxyActionStrategy.count(3));
 
         /** 刷活动图*/
-//    FactoryUtil.exec(ActivityHuoLanZhiXinStrategy.get("OF-7"));
-//    FactoryUtil.exec(ProxyActionStrategy.count(5));
+        FactoryUtil.exec(ActivityHuoLanZhiXinStrategy.get("OF-7"));
+        FactoryUtil.exec(ProxyActionStrategy.count(5));
         FactoryUtil.exec(ActivityHuoLanZhiXinStrategy.get("OF-8"));
-        FactoryUtil.exec(ProxyActionStrategy.class);
+        FactoryUtil.exec(ProxyActionStrategy.energy(3));
 
         FactoryUtil.exec(ActivityHuoLanZhiXinStrategy.get("OF-F4"));
+        FactoryUtil.exec(ProxyActionStrategy.class);
+
+        /** 常规刷图 */
+        FactoryUtil.exec(new JumpChapterStrategy(getType()));
         FactoryUtil.exec(ProxyActionStrategy.class);
 
         FactoryUtil.exec(TaskStrategy.class);
         FactoryUtil.exec(PurchasingStrategy.class);
         FactoryUtil.exec(BuildStrategy.class);
 
-        FactoryUtil.exec(ExitStragery.class);
-
+//        FactoryUtil.exec(ExitStragery.class);
     }
 
     private static int getType() {

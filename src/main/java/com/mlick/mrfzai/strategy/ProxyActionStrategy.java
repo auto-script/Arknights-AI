@@ -26,6 +26,14 @@ public class ProxyActionStrategy extends AutoStrategy implements AutoProxy {
    */
   private int maxCount = Integer.MAX_VALUE;
 
+  public void setNum(int num) {
+    this.num = num;
+  }
+
+  public void setMaxCount(int maxCount) {
+    this.maxCount = maxCount;
+  }
+
   public ProxyActionStrategy() {
   }
 
@@ -37,6 +45,9 @@ public class ProxyActionStrategy extends AutoStrategy implements AutoProxy {
     ProxyActionStrategy proxyActionStrategy = new ProxyActionStrategy();
     proxyActionStrategy.maxCount = i;
     return proxyActionStrategy;
+  }
+  public static ProxyActionStrategy energy(int i) {
+    return new ProxyActionStrategy(i);
   }
 
   @Override

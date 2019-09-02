@@ -101,9 +101,12 @@ public class StratrgyTest {
         FactoryUtil.exec(ExitStragery.class);
     }
 
-    //@Test
+    @Test
     public void proxyStrategy() {
-        FactoryUtil.exec(ProxyActionStrategy.class);
+        ProxyActionStrategy strategy = new ProxyActionStrategy();
+//        strategy.setMaxCount(10);
+//        strategy.setNum(5);
+        FactoryUtil.exec(strategy);
     }
 
     //@Test
@@ -223,7 +226,11 @@ public class StratrgyTest {
 
         UUID.randomUUID().toString();
 
-        String u = "W82yxMQruqWRM6U2ejypBUSb4z8yz7+TacvPTvGK1i7Q+/+hdA+Fnr84bk8IHEgCVjUelblcRKrGrCG6C0Aw7CbuYWC4Zvvtx8aqk9y527rz7XNOim8XdgvzgCurhyn65gwv6nK/wZ1RSvKCwHSu/dm5HhbRgkHVyWxq4kEiwNqIYGTSEhQrOcKe9bybbuf43tHm8VcDYnUQJtlXUn2Nqh+mUrdBjHBCzcgM0FxOigU6lxlyIGn2chM6UMZhvietI5pl/gOaD4rJhlMM621lQWEK/QF+DvPjI7vNZlriClzc+xnrfqgGtKaNwv2ZP43Y9F5/jxEjNR/B4o6tGtyrig==";
+        String u = "W82yxMQruqWRM6U2ejypBUSb4z8yz7+TacvPTvGK1i7Q+/+hdA" +
+            "+Fnr84bk8IHEgCVjUelblcRKrGrCG6C0Aw7CbuYWC4Zvvtx8aqk9y527rz7XNOim8XdgvzgCurhyn65gwv6nK/wZ1RSvKCwHSu" +
+            "/dm5HhbRgkHVyWxq4kEiwNqIYGTSEhQrOcKe9bybbuf43tHm8VcDYnUQJtlXUn2Nqh" +
+            "+mUrdBjHBCzcgM0FxOigU6lxlyIGn2chM6UMZhvietI5pl/gOaD4rJhlMM621lQWEK/QF+DvPjI7vNZlriClzc" +
+            "+xnrfqgGtKaNwv2ZP43Y9F5/jxEjNR/B4o6tGtyrig==";
 
         String p = "Test1234";
 
@@ -251,13 +258,13 @@ public class StratrgyTest {
     }
 
     //@Test
-    public void testJumpHome(){
-      FactoryUtil.exec(new JumpChapterStrategy(0));
+    public void testJumpHome() {
+        FactoryUtil.exec(new JumpChapterStrategy(0));
     }
 
 
     @Test
-    public void tA2(){
+    public void tA2() {
         FactoryUtil.exec(ActivityHuoLanZhiXinStrategy.get("OF-7"));
         FactoryUtil.exec(ProxyActionStrategy.class);
         FactoryUtil.exec(ActivityHuoLanZhiXinStrategy.get("OF-F3"));
@@ -272,7 +279,7 @@ public class StratrgyTest {
     }
 
     @Test
-    public void getDevices(){
+    public void getDevices() {
         MainAuto.getAdb(new String[]{});
     }
 }
