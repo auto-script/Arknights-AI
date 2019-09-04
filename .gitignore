@@ -15,3 +15,5 @@ buildNumber.properties
 /config/
 /logs/
 /out/
+/current.png
+/screen.png

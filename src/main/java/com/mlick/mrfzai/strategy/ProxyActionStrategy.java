@@ -26,7 +26,7 @@ public class ProxyActionStrategy extends AutoStrategy implements AutoProxy {
    */
   private int maxCount = Integer.MAX_VALUE;
 
-  public void setNum(int num) {
+  public void setEnergy(int num) {
     this.num = num;
   }
 
@@ -53,7 +53,7 @@ public class ProxyActionStrategy extends AutoStrategy implements AutoProxy {
   @Override
   public void exec() {
 
-    OpenCvUtils.findAndAction("un_proxy_.png");
+    OpenCvUtils.findAndAction("un_proxy.png");
 
     int s = 1;
     do {

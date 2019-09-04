@@ -104,8 +104,8 @@ public class StratrgyTest {
     @Test
     public void proxyStrategy() {
         ProxyActionStrategy strategy = new ProxyActionStrategy();
-//        strategy.setMaxCount(10);
-//        strategy.setNum(5);
+        strategy.setMaxCount(10);
+        strategy.setEnergy(2);
         FactoryUtil.exec(strategy);
     }
 
@@ -265,9 +265,10 @@ public class StratrgyTest {
 
     @Test
     public void tA2() {
-        FactoryUtil.exec(ActivityHuoLanZhiXinStrategy.get("OF-7"));
+        FactoryUtil.exec(ActivityHuoLanZhiXinStrategy.get("OF-8"));
         FactoryUtil.exec(ProxyActionStrategy.class);
-        FactoryUtil.exec(ActivityHuoLanZhiXinStrategy.get("OF-F3"));
+
+        FactoryUtil.exec(ActivityHuoLanZhiXinStrategy.get("OF-F4"));
         FactoryUtil.exec(ProxyActionStrategy.class);
     }
 

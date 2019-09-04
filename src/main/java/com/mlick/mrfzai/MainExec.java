@@ -20,8 +20,6 @@ public class MainExec {
 
     /**
      * 记一个坑： cmd 执行时不能使用 String ... 这种泛型格式
-     *
-     * @param args
      */
     public static void main(String[] args) {
 
@@ -54,21 +52,22 @@ public class MainExec {
 
 
         /** 常规刷图 */
-        FactoryUtil.exec(new JumpChapterStrategy(getType()));
-        FactoryUtil.exec(ProxyActionStrategy.count(3));
+//        FactoryUtil.exec(new JumpChapterStrategy(getType()));
+//        FactoryUtil.exec(ProxyActionStrategy.count(3));
 
         /** 刷活动图*/
         FactoryUtil.exec(ActivityHuoLanZhiXinStrategy.get("OF-7"));
-        FactoryUtil.exec(ProxyActionStrategy.count(5));
+        FactoryUtil.exec(ProxyActionStrategy.count(2));
         FactoryUtil.exec(ActivityHuoLanZhiXinStrategy.get("OF-8"));
-        FactoryUtil.exec(ProxyActionStrategy.energy(3));
+//        FactoryUtil.exec(ProxyActionStrategy.energy(3));
+        FactoryUtil.exec(ProxyActionStrategy.class);
 
         FactoryUtil.exec(ActivityHuoLanZhiXinStrategy.get("OF-F4"));
         FactoryUtil.exec(ProxyActionStrategy.class);
 
         /** 常规刷图 */
-        FactoryUtil.exec(new JumpChapterStrategy(getType()));
-        FactoryUtil.exec(ProxyActionStrategy.class);
+//        FactoryUtil.exec(new JumpChapterStrategy(getType()));
+//        FactoryUtil.exec(ProxyActionStrategy.class);
 
         FactoryUtil.exec(TaskStrategy.class);
         FactoryUtil.exec(PurchasingStrategy.class);
@@ -79,9 +78,7 @@ public class MainExec {
 
     private static int getType() {
 
-        DayOfWeek dayOfWeek = LocalDateTime.now().toLocalDate().getDayOfWeek();
-
-        switch (dayOfWeek) {
+        switch (LocalDateTime.now().toLocalDate().getDayOfWeek()) {
             case MONDAY:
             case WEDNESDAY:
             case FRIDAY:

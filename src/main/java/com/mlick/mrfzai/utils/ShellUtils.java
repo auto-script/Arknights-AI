@@ -162,7 +162,7 @@ public class ShellUtils {
     if (point == null) {
       return false;
     }
-    return execute(adbPath, "shell", getTapPhone(point));
+    return execute(false,adbPath, "shell", getTapPhone(point));
   }
 
 
