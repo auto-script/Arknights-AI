@@ -7,6 +7,7 @@ package com.mlick.mrfzai.core;
 public enum Action {
 
   INSTANCE("", ""),
+  INDEX_TERMINAL("index_zhongduan", "首页终端"),
   START_ACTION("start_action_btn", "开始行动（横）"),
   START_ACTION2("start_action_btn2", "开始行动（竖）"),
   YES_1("yes_btn", "红底加白底确认"),

@@ -94,9 +94,18 @@ public class OpenCvUtils {
         ShellUtils.executePoint(point);
         return point;
     }
+    public static Point findAndAction(Action action) {
+        Point point = findImage(action.getImg());
+        ShellUtils.executePoint(point);
+        return point;
+    }
 
     public static boolean findAndActionForResult(String templateImg) {
         return ShellUtils.executePoint(findImage(templateImg));
+    }
+
+    public static Point findImage(Action action) {
+        return findImage(action.getImg());
     }
 
     public static Point findImage(String templateImg) {
@@ -142,7 +151,8 @@ public class OpenCvUtils {
         int intMatchingMethod;
 
 
-        intMatchingMethod = Imgproc.TM_CCOEFF_NORMED;
+//        intMatchingMethod = Imgproc.TM_CCOEFF_NORMED;//标准相关匹配
+        intMatchingMethod = Imgproc.TM_CCORR;//相关匹配
 
         Imgproc.matchTemplate(sourceMat, templateMat, result, intMatchingMethod);
         Core.MinMaxLocResult minMaxLocRes = Core.minMaxLoc(result);
@@ -150,13 +160,12 @@ public class OpenCvUtils {
         double accuracy = minMaxLocRes.maxVal;
 
         System.out.println(accuracy);
-
-        if (accuracy < DESIRED_ACCURACY) {
-            ShellUtils.sleepTime(1);
-            System.err.println(templateImg.getImg() + "=>【" + templateImg.getName() + "】未找到=>" + accuracy);
-            ShellUtils.sleepTime(1);
-            return null;
-        }
+//        if (accuracy < DESIRED_ACCURACY) {
+//            ShellUtils.sleepTime(1);
+//            System.err.println(templateImg.getImg() + "=>【" + templateImg.getName() + "】未找到=>" + accuracy);
+//            ShellUtils.sleepTime(1);
+//            return null;
+//        }
 
         if (!minMaxLocResultIsValid(minMaxLocRes)) {
             System.out.println(
@@ -177,7 +186,7 @@ public class OpenCvUtils {
 
         Imgproc.rectangle(sourceMat, matchLocation,
             new Point(matchLocation.x + templateMat.cols(), matchLocation.y + templateMat.rows()),
-            new Scalar(0, 0, 0, 0));
+                          new Scalar(0, 255, 0));
 
         Imgcodecs.imwrite(resultImgFile, sourceMat);
 

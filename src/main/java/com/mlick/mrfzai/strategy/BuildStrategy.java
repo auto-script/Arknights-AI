@@ -54,10 +54,14 @@ public class BuildStrategy extends AutoStrategy {
     Point point;
 
     // 黄色产品
-    while ((point = OpenCvUtils.findImage("product_tip.png")) != null) {
-      ShellUtils.executePoint(point);
-      ShellUtils.sleepTime(3);
-    }
+
+    // 方式已过时
+//    while ((point = OpenCvUtils.findImage("product_tip.png")) != null) {
+//      ShellUtils.executePoint(point);
+//      ShellUtils.sleepTime(3);
+//    }
+
+
 
     // 蓝色产品
     while ((point = OpenCvUtils.findImage("order_tip.png")) != null) {

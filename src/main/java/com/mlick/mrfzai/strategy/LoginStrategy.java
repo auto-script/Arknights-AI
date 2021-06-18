@@ -96,6 +96,8 @@ public class LoginStrategy extends AutoStrategy {
 
     // TODO 可能登录失败
 
+    OpenCvUtils.findNextWhiteAction();
+
   }
 
 }

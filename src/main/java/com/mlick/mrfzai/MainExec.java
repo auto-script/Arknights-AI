@@ -5,7 +5,6 @@ import com.mlick.mrfzai.utils.FactoryUtil;
 import com.mlick.mrfzai.utils.NoxUtils;
 import com.mlick.mrfzai.utils.ShellUtils;
 
-import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 
 import static com.mlick.mrfzai.core.Constants.isVmRunning;
@@ -43,7 +42,7 @@ public class MainExec {
 
         FactoryUtil.exec(IndexStrategy.class);
 
-        FactoryUtil.exec(ActivityLimitTimeStrategy.class);
+//        FactoryUtil.exec(ActivityLimitTimeStrategy.class);
 
         FactoryUtil.exec(EmailStrategy.class);
         FactoryUtil.exec(TaskStrategy.class);
@@ -52,18 +51,20 @@ public class MainExec {
 
 
         /** 常规刷图 */
-//        FactoryUtil.exec(new JumpChapterStrategy(getType()));
-//        FactoryUtil.exec(ProxyActionStrategy.count(3));
+        FactoryUtil.exec(new JumpChapterStrategy(getType()));
+        FactoryUtil.exec(ProxyActionStrategy.count(3));
 
         /** 刷活动图*/
-        FactoryUtil.exec(ActivityHuoLanZhiXinStrategy.get("OF-7"));
-        FactoryUtil.exec(ProxyActionStrategy.count(2));
-        FactoryUtil.exec(ActivityHuoLanZhiXinStrategy.get("OF-8"));
-//        FactoryUtil.exec(ProxyActionStrategy.energy(3));
-        FactoryUtil.exec(ProxyActionStrategy.class);
-
-        FactoryUtil.exec(ActivityHuoLanZhiXinStrategy.get("OF-F4"));
-        FactoryUtil.exec(ProxyActionStrategy.class);
+//        FactoryUtil.exec(ActivityHuoLanZhiXinStrategy.get("OF-7"));
+//        FactoryUtil.exec(ProxyActionStrategy.energy(2));
+//        FactoryUtil.exec(ProxyActionStrategy.count(15));
+//
+//        FactoryUtil.exec(ActivityHuoLanZhiXinStrategy.get("OF-8"));
+//        //FactoryUtil.exec(ProxyActionStrategy.energy(1));
+//        FactoryUtil.exec(ProxyActionStrategy.class);
+//
+//        FactoryUtil.exec(ActivityHuoLanZhiXinStrategy.get("OF-F4"));
+//        FactoryUtil.exec(ProxyActionStrategy.class);
 
         /** 常规刷图 */
 //        FactoryUtil.exec(new JumpChapterStrategy(getType()));

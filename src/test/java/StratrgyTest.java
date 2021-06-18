@@ -11,7 +11,9 @@ import org.junit.Test;
 import org.opencv.core.Point;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.Base64;
+import java.util.Objects;
 import java.util.UUID;
 
 import static com.mlick.mrfzai.utils.RandomUtils.getRandom;
@@ -63,12 +65,12 @@ public class StratrgyTest {
     }
 
 
-    //@Test
+    @Test
     public void loginTest() {
         FactoryUtil.exec(LoginStrategy.class);
     }
 
-    //@Test
+    @Test
     public void indexTest() {
         AutoStrategy autoStrategy = new com.mlick.mrfzai.strategy.IndexStrategy();
         autoStrategy.exec();
@@ -91,7 +93,7 @@ public class StratrgyTest {
         FactoryUtil.exec(BuildStrategy.class);
     }
 
-    //@Test
+    @Test
     public void testAutoLogin() {
         new LoginStrategy().autoLogin();
     }
@@ -227,10 +229,10 @@ public class StratrgyTest {
         UUID.randomUUID().toString();
 
         String u = "W82yxMQruqWRM6U2ejypBUSb4z8yz7+TacvPTvGK1i7Q+/+hdA" +
-            "+Fnr84bk8IHEgCVjUelblcRKrGrCG6C0Aw7CbuYWC4Zvvtx8aqk9y527rz7XNOim8XdgvzgCurhyn65gwv6nK/wZ1RSvKCwHSu" +
-            "/dm5HhbRgkHVyWxq4kEiwNqIYGTSEhQrOcKe9bybbuf43tHm8VcDYnUQJtlXUn2Nqh" +
-            "+mUrdBjHBCzcgM0FxOigU6lxlyIGn2chM6UMZhvietI5pl/gOaD4rJhlMM621lQWEK/QF+DvPjI7vNZlriClzc" +
-            "+xnrfqgGtKaNwv2ZP43Y9F5/jxEjNR/B4o6tGtyrig==";
+                "+Fnr84bk8IHEgCVjUelblcRKrGrCG6C0Aw7CbuYWC4Zvvtx8aqk9y527rz7XNOim8XdgvzgCurhyn65gwv6nK/wZ1RSvKCwHSu" +
+                "/dm5HhbRgkHVyWxq4kEiwNqIYGTSEhQrOcKe9bybbuf43tHm8VcDYnUQJtlXUn2Nqh" +
+                "+mUrdBjHBCzcgM0FxOigU6lxlyIGn2chM6UMZhvietI5pl/gOaD4rJhlMM621lQWEK/QF+DvPjI7vNZlriClzc" +
+                "+xnrfqgGtKaNwv2ZP43Y9F5/jxEjNR/B4o6tGtyrig==";
 
         String p = "Test1234";
 
@@ -265,6 +267,11 @@ public class StratrgyTest {
 
     @Test
     public void tA2() {
+        /** 刷活动图*/
+        FactoryUtil.exec(ActivityHuoLanZhiXinStrategy.get("OF-7"));
+        FactoryUtil.exec(ProxyActionStrategy.energy(2));
+        FactoryUtil.exec(ProxyActionStrategy.count(15));
+
         FactoryUtil.exec(ActivityHuoLanZhiXinStrategy.get("OF-8"));
         FactoryUtil.exec(ProxyActionStrategy.class);
 
@@ -282,5 +289,29 @@ public class StratrgyTest {
     @Test
     public void getDevices() {
         MainAuto.getAdb(new String[]{});
+    }
+
+
+    @Test
+    public void t6() {
+        OpenCvUtils.findAndAction(Action.YES_3);
+        ShellUtils.screenCap();
+    }
+
+
+    @Test
+    public void t7() {
+        String templateImg = Action.INDEX_TERMINAL.getImg();
+
+        String screen = Objects.requireNonNull(Paths.get("screen.png").toFile()).getAbsolutePath();
+        System.out.println(screen);
+
+        String path = Objects.requireNonNull(Paths.get("resources/" + templateImg).toFile()).getAbsolutePath();
+        System.out.println(path);
+
+        Point point = OpenCvUtils.findImage(screen, path, "result_tmp.png");
+
+        System.out.println(point.toString());
+
     }
 }
