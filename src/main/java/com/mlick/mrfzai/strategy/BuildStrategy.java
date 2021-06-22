@@ -1,5 +1,6 @@
 package com.mlick.mrfzai.strategy;
 
+import com.mlick.mrfzai.core.Action;
 import com.mlick.mrfzai.core.AutoStrategy;
 import com.mlick.mrfzai.utils.OpenCvUtils;
 import com.mlick.mrfzai.utils.ShellUtils;
@@ -95,7 +96,7 @@ public class BuildStrategy extends AutoStrategy {
     ShellUtils.executePoint(OpenCvUtils.findBlackBackBtn());
 
 
-    OpenCvUtils.loopFindIfNullExit("back_black_btn");
+    OpenCvUtils.loopFindIfNullExit(Action.BACK_BLACK_BTN);
 
   }
 

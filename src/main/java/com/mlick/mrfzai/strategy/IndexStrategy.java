@@ -5,27 +5,18 @@ import com.mlick.mrfzai.utils.OpenCvUtils;
 import com.mlick.mrfzai.utils.ShellUtils;
 import org.opencv.core.Point;
 
+import static com.mlick.mrfzai.core.Action.EXIT_1;
+
 /**
  * @author lixiangxin
  * @date 2019/6/11 00:18
  * 首页 策略
  **/
 public class IndexStrategy extends AutoStrategy {
-  @Override
-  public void exec() {
-    Point point1 = null;
-    Point point2;
-
-    while ((point2 = OpenCvUtils.findExitAction()) != null || (point1 = OpenCvUtils.findNextAction()) != null) {
-      ShellUtils.executePoint(point2);
-      ShellUtils.executePoint(point1);
+    @Override
+    public void exec() {
+        OpenCvUtils.loopFindIfNullExit(EXIT_1);
     }
-
-    OpenCvUtils.loopFindIfNullExit("exit_btn");
-
-    OpenCvUtils.loopFindIfNullExit("next_btn");
-
-  }
 
 
 }

@@ -1,5 +1,6 @@
 package com.mlick.mrfzai.strategy;
 
+import com.mlick.mrfzai.core.Action;
 import com.mlick.mrfzai.core.AutoStrategy;
 import com.mlick.mrfzai.utils.OpenCvUtils;
 
@@ -13,9 +14,9 @@ public class PurchasingStrategy extends AutoStrategy {
 
         OpenCvUtils.loopFind("caigou_center");
 
-        OpenCvUtils.loopFind("jiaoyisuo",5);
+        OpenCvUtils.loopFind("jiaoyisuo", 5);
 
-        OpenCvUtils.loopFindIfNullExit("get_credit");
+        OpenCvUtils.loopFindIfNullExit(Action.GET_CREDIT);
 
         OpenCvUtils.loopFind("back_black_btn");
 

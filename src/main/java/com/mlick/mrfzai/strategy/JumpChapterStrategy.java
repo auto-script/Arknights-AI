@@ -1,5 +1,6 @@
 package com.mlick.mrfzai.strategy;
 
+import com.mlick.mrfzai.core.Action;
 import com.mlick.mrfzai.core.AutoStrategy;
 import com.mlick.mrfzai.utils.OpenCvUtils;
 import com.mlick.mrfzai.utils.RandomUtils;
@@ -13,6 +14,14 @@ import org.opencv.core.Point;
 public class JumpChapterStrategy extends AutoStrategy {
 
     private int stage = 2;
+    private TYPE type = TYPE.MONEY;
+
+    enum TYPE {
+        INDEX,
+        MONEY,
+        EXPERIENCE,
+        BUILDING
+    }
 
     public JumpChapterStrategy() {
     }
@@ -23,36 +32,34 @@ public class JumpChapterStrategy extends AutoStrategy {
         this.stage = i;
     }
 
+    public JumpChapterStrategy(TYPE i) {
+        super();
+        this.type = i;
+    }
+
     @Override
     public void exec() {
-
-        Point andAction = OpenCvUtils.findAndAction("home_fight.png");
-        if (stage != 0 && andAction == null) {
-            OpenCvUtils.findAndAction("home.png");
-            ShellUtils.sleepTime(3);
-            OpenCvUtils.findAndAction("fight.png");
-            ShellUtils.sleepTime(8);
+        Point indexAction = OpenCvUtils.findAndAction(Action.INDEX_TERMINAL);
+        if (indexAction == null) {
+            System.err.println("没有发现在首页,待处理");
+            return;
         }
 
-        switch (stage) {
-
-            case 0:// 首页
+        switch (type) {
+            case INDEX:// 首页
                 OpenCvUtils.findAndAction("home.png");
                 ShellUtils.sleepTime(3);
                 OpenCvUtils.findAndAction("home_index.png");
                 break;
-            case 1:// 跳转到经验
+            case EXPERIENCE:// 跳转到经验
                 execJump("fight_experience.png", "LS-5.png");
                 break;
-
-            case 2:// 跳转到龙门币
-                execJump("fight_money.png", "CE-5.png");
+            case MONEY:// 跳转到龙门币
+                execJump(Action.FIGHT_MONEY, Action.CE_5);
                 break;
-
-            case 3:// 跳转到基站
-                execJump("fight_money.png", "CE-5.png");
+            case BUILDING:// 跳转到基站
+//                execJump("fight_money.png", "CE-5.png");
                 break;
-
             default:
                 break;
         }
@@ -60,7 +67,10 @@ public class JumpChapterStrategy extends AutoStrategy {
     }
 
     private void execJump(String s, String s2) {
-        loopFindAction("goods.png", 3);
+        Point point = OpenCvUtils.findAndAction(Action.GOODS);
+        if (point == null) {
+            return;
+        }
 
         int i = loopFindAction(s, 1);
         if (i == 0) {
@@ -74,6 +84,22 @@ public class JumpChapterStrategy extends AutoStrategy {
         } else {
             loopFindAction(s2, 1);
         }
+    }
+
+    private void execJump(Action s, Action s2) {
+        Point point = OpenCvUtils.retryExec(Action.GOODS, 3);
+        if (point == null) {
+            throw new RuntimeException("资源物资未找到");
+        }
+
+        point = OpenCvUtils.findAndAction(s);
+        if (point == null) {
+            return;
+        }
+
+        ShellUtils.sleepTime();
+
+        OpenCvUtils.findAndAction(s2);
     }
 
     private int loopFindAction(String s, int i) {

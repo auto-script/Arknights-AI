@@ -42,7 +42,7 @@ public class Main {
       AutoStrategy autoStrategy = null;
       switch (sel) {
         case 0:
-          autoStrategy = new LauncyStragery();
+          autoStrategy = new StartAppStrategy();
           break;
         case 1:
           autoStrategy = new LoginStrategy();

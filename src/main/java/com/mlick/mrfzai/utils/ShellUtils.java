@@ -1,5 +1,6 @@
 package com.mlick.mrfzai.utils;
 
+import com.mlick.mrfzai.core.Constants;
 import org.opencv.core.Point;
 
 import javax.imageio.ImageIO;
@@ -10,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import static com.mlick.mrfzai.core.Constants.FILE_TEMP_PATH;
 
 /**
  * @author lixiangxin
@@ -23,28 +26,32 @@ public class ShellUtils {
     public static String adbPath = Paths.get("resources/adb/%s.exe").toFile().getAbsolutePath();
 
 
-    public static String screenPath = "screen.png";
-
     public static void screenCap() {
+        String nowDate = DateUtils.getNowDate();
+        Constants.screenPath = String.format("%s-screen.png", nowDate);
+        Constants.resultPath = String.format("%s-result.png", nowDate);
         try {
-            screenCap(screenPath);
+            screenCap(Constants.screenPath);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public static synchronized void screenCap(String saveFile) throws IOException {
+        checkFileMore();
         boolean result = execute(adbPath, "shell", "screencap", "-p", "/sdcard/screen.png");
         if (!result) {
             throw new RuntimeException("手机分辨率检测失败，请检查电脑与手机连接和手机设置。");
         }
 
-        File pullFile = new File(saveFile);
+        File pullFile = new File(FILE_TEMP_PATH + saveFile);
         result = execute(false, adbPath, "pull", "/sdcard/screen.png", pullFile.getAbsolutePath());
         if (!result) {
             System.err.println("手机分辨率检测失败，请检查电脑与手机连接和手机设置。");
             return;
         }
+
+        System.out.println("pull screen.png success:" + pullFile.getAbsolutePath());
 
         BufferedImage src = ImageIO.read(new FileInputStream(pullFile));
         if (src.getWidth() >= src.getHeight()) {
@@ -53,8 +60,10 @@ public class ShellUtils {
         //顺时针旋转270度
         BufferedImage des1 = RotateImage.Rotate(src, 270);
         ImageIO.write(des1, "png", pullFile);
+    }
 
-        System.out.println("pull screen.png success:" + pullFile.getAbsolutePath());
+    private static void checkFileMore() {
+
     }
 
 
@@ -164,7 +173,7 @@ public class ShellUtils {
         if (point == null) {
             return false;
         }
-        return execute(false, adbPath, "shell", getTapPhone(point));
+        return execute(true, adbPath, "shell", getTapPhone(point));
     }
 
 
@@ -178,7 +187,7 @@ public class ShellUtils {
 
     public static boolean execute(boolean show, String... cmd) {
         if (show) {
-            System.out.println("==>" + Arrays.toString(cmd).replaceAll(",", ""));
+            System.out.println(Arrays.toString(cmd).replaceAll(",", ""));
         }
 
         try {
@@ -196,7 +205,6 @@ public class ShellUtils {
     }
 
     public static List<String> readSuccess(Process proc) throws IOException {
-        System.out.println("readSuccess---------->");
         List<String> strs = new ArrayList<>();
 
         InputStream stdin = proc.getInputStream();
@@ -206,10 +214,8 @@ public class ShellUtils {
         String line;
 
         while ((line = br.readLine()) != null) {
-            System.out.println("out ===>" + line);
             strs.add(line);
         }
-        System.out.println("=================");
         return strs;
     }
 
@@ -217,48 +223,15 @@ public class ShellUtils {
      * 等待时间
      *
      * @param i 等待时间数 单位为秒
-     *          注意: 默认会多等待3秒钟
      */
     public static void sleepTime(int i) {
         try {
-            if (i < 5) {
-                TimeUnit.SECONDS.sleep(i);
-                return;
-            }
-            String ctx = "";
-            for (int j = i; j > 0; j--) {
-                ctx = "请等待==>" + j + "s";
-                System.out.print(getBackslash(ctx.length()) + ctx);
-                TimeUnit.SECONDS.sleep(1);
-            }
-            System.out.print(getBackslash(ctx.length()));
-
-            TimeUnit.SECONDS.sleep(1);
-
+            String ctx = "等待==>" + i + "s";
+            System.out.println(ctx);
+            TimeUnit.SECONDS.sleep(i + 1);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-    }
-
-//  public static void sleepTime2(int i) {
-//    System.out.println("等待 战斗结束->" + i + "秒");
-//    for (int j = i; j > 0; j--) {
-//      System.out.print("\r" + j);
-//      try {
-//        TimeUnit.SECONDS.sleep(1);
-//      } catch (InterruptedException ignored) {
-//      }
-//    }
-//
-//    System.out.print("\r");
-//  }
-
-    private static String getBackslash(int length) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < length; i++) {
-            sb.append("\r");
-        }
-        return sb.toString();
     }
 
     public static void main(String[] args) {
@@ -269,4 +242,7 @@ public class ShellUtils {
     }
 
 
+    public static void sleepTime() {
+        sleepTime(Constants.SLEEP_TIME);
+    }
 }

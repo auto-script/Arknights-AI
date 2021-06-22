@@ -1,5 +1,6 @@
 package com.mlick.mrfzai.strategy;
 
+import com.mlick.mrfzai.core.Action;
 import com.mlick.mrfzai.core.AutoStrategy;
 import com.mlick.mrfzai.utils.OpenCvUtils;
 import com.mlick.mrfzai.utils.RandomUtils;
@@ -16,88 +17,68 @@ import static com.mlick.mrfzai.utils.ShellUtils.adbPath;
  **/
 public class LoginStrategy extends AutoStrategy {
 
-  @Override
-  public void exec() {
+    @Override
+    public void exec() {
 
-    Point point = OpenCvUtils.findImage("email_btn.png");
-    if (point != null) {
-      System.out.println("检测到已在首页");
-      return;
+        Point point, loginPoint;
+
+        point = OpenCvUtils.findImage(Action.START_WAKE);
+        if (point != null) {
+            ShellUtils.executePoint(point);
+            ShellUtils.sleepTime(RandomUtils.getRandom(6, 8));
+
+
+            Point andAction = OpenCvUtils.findImage(Action.YES_3);
+
+            // 记忆已经模糊，请重新输入登录信息
+            Point jiYiMoHu = OpenCvUtils.findImage(Action.JI_YI_MO_HU);
+            if (jiYiMoHu != null) {
+                ShellUtils.sleepTime();
+            }
+
+            if (andAction != null) {
+                ShellUtils.executePoint(andAction);
+            }
+        }
+
+        loginPoint = OpenCvUtils.findLoginAccountBtn();
+
+        if (loginPoint == null) {
+            System.out.println("可能正在登录中...");
+            return;
+        }
+
+        ShellUtils.executePoint(loginPoint);
+        ShellUtils.sleepTime(5);
+
+        autoLogin();
     }
 
-    int count = 0;
-    // 点击开始 按钮
-    while ((point = OpenCvUtils.findStart()) == null && count ++ < 3) {
-      OpenCvUtils.findImage("yes_btn");
-      ShellUtils.sleepTime(5);
+    public void autoLogin() {
+        Point loginPoint = OpenCvUtils.findImage(Action.LOGIN_MLICK_INPUT);
+
+        if (loginPoint == null) {
+            loginPoint = OpenCvUtils.findAndAction(Action.LOGIN_ACCOUNT_INPUT);
+            if (loginPoint == null) {
+                System.out.println("账号输入按钮失败,待处理");
+            }
+
+            ShellUtils.execute(adbPath, "shell", "input", "text", "18321295235");
+
+            OpenCvUtils.findAndAction(Action.ENTER_BTN);
+        }
+
+        OpenCvUtils.findAndAction(Action.LOGIN_PASSWORD_INPUT);
+        ShellUtils.sleepTime(3);
+
+        ShellUtils.execute(adbPath, "shell", "input", "text", "301415926l");
+
+        OpenCvUtils.findAndAction(Action.ENTER_BTN);
+
+        OpenCvUtils.findAndAction(Action.LOGIN_BTN);
+
+        ShellUtils.sleepTime(15);
+
     }
-    ShellUtils.executePoint(point);
-
-    ShellUtils.sleepTime(5);
-
-    point = OpenCvUtils.loopFind("start_wake.png",5);
-
-    if (point != null) {
-      System.out.println("发现【开始唤醒】...");
-      ShellUtils.executePoint(point);
-      ShellUtils.sleepTime(RandomUtils.getRandom(6, 8));
-    }
-
-    point = OpenCvUtils.findNextWhiteAction();
-    Point loginPoint = OpenCvUtils.findLoginAccountBtn();
-
-    if (point == null && loginPoint == null) {
-      System.out.println("登陆可能成功");
-      return;
-    }
-
-    if (point != null) {
-      System.out.println("发现【登陆失败】或者【更新】...");
-      ShellUtils.executePoint(point);
-      ShellUtils.sleepTime(RandomUtils.getRandom(1, 2));
-    }
-
-    loginPoint = OpenCvUtils.findLoginAccountBtn();
-
-    while (loginPoint == null) {
-      System.out.println("等待检测【账号登陆】...");
-      loginPoint = OpenCvUtils.findLoginAccountBtn();
-      ShellUtils.sleepTime(5);
-    }
-
-    System.out.println("发现【账号登陆】...");
-    ShellUtils.executePoint(loginPoint);
-    ShellUtils.sleepTime(5);
-
-    autoLogin();
-
-  }
-
-  public void autoLogin() {
-    Point loginPoint = OpenCvUtils.findImage("login_mlick_input.png");
-
-    // 重试 3 次
-    for (int i = 1; i <= 3 && loginPoint == null; i++) {
-      loginPoint = OpenCvUtils.findAndAction("login_account_input.png");
-      ShellUtils.sleepTime(i + 1);
-      ShellUtils.execute(adbPath, "shell", "input", "text", "18321295235");
-      OpenCvUtils.findAndAction("enter_btn.png");
-    }
-
-    OpenCvUtils.findAndAction("login_password_input.png");
-
-    ShellUtils.execute(adbPath, "shell", "input", "text", "123456lxx");
-
-    OpenCvUtils.findAndAction("enter_btn.png");
-
-    OpenCvUtils.findAndAction("login_btn.png");
-
-    ShellUtils.sleepTime(10);
-
-    // TODO 可能登录失败
-
-    OpenCvUtils.findNextWhiteAction();
-
-  }
 
 }

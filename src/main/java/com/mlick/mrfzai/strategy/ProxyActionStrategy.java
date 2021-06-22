@@ -1,5 +1,6 @@
 package com.mlick.mrfzai.strategy;
 
+import com.mlick.mrfzai.core.Action;
 import com.mlick.mrfzai.core.AutoProxy;
 import com.mlick.mrfzai.core.AutoStrategy;
 import com.mlick.mrfzai.utils.*;
@@ -7,7 +8,9 @@ import org.opencv.core.Point;
 
 import java.io.IOException;
 
+import static com.mlick.mrfzai.core.Action.START_ACTION2;
 import static com.mlick.mrfzai.utils.ShellUtils.*;
+import static com.mlick.mrfzai.utils.ShellUtils.sleepTime;
 
 /**
  * @author lixiangxin
@@ -16,188 +19,182 @@ import static com.mlick.mrfzai.utils.ShellUtils.*;
  **/
 public class ProxyActionStrategy extends AutoStrategy implements AutoProxy {
 
-  /**
-   * 需要换购的原石数
-   */
-  private int num = 1;
+    /**
+     * 需要换购的原石数
+     */
+    private int num = 0;
+    private int numC;
 
-  /**
-   * 最大要执行的次数 为0表示不执行
-   */
-  private int maxCount = Integer.MAX_VALUE;
+    /**
+     * 最大要执行的次数 为0表示不执行
+     */
+    private int maxCount = Integer.MAX_VALUE;
 
-  public void setEnergy(int num) {
-    this.num = num;
-  }
-
-  public void setMaxCount(int maxCount) {
-    this.maxCount = maxCount;
-  }
-
-  public ProxyActionStrategy() {
-  }
-
-  public ProxyActionStrategy(int num) {
-    this.num = num;
-  }
-
-  public static ProxyActionStrategy count(int i) {
-    ProxyActionStrategy proxyActionStrategy = new ProxyActionStrategy();
-    proxyActionStrategy.maxCount = i;
-    return proxyActionStrategy;
-  }
-  public static ProxyActionStrategy energy(int i) {
-    return new ProxyActionStrategy(i);
-  }
-
-  @Override
-  public void exec() {
-
-    OpenCvUtils.findAndAction("un_proxy.png");
-
-    int s = 1;
-    do {
-      System.out.println("第" + s + "次执行");
-      try {
-        loopExec(s);
-      } catch (IOException ignored) {
-      } finally {
-        s++;
-      }
-    } while (s <= maxCount);
-
-    FactoryUtil.exec(new JumpChapterStrategy(0));
-  }
-
-  @Override
-  public void loopExec(int n) throws IOException {
-    // 开始行动 1
-    System.out.println("开始行动 1");
-
-    screenCap("current" + ".png");
-
-    Point point = OpenCvUtils.findProxyStartAction();
-
-    if (point == null) {
-      point = OpenCvUtils.loopFind("active_start_action", 3);
+    public void setEnergy(int num) {
+        this.num = num;
     }
 
-    if (point == null) {
-      ShellUtils.sleepTime(2);
-      System.err.println("未找到 开始行动 1");
-      ShellUtils.sleepTime(2);
-
-      //处理可能出现其它情况 随机点击一处屏幕
-      ShellUtils.tapPhone(255, 255);
-      ShellUtils.sleepTime(3);
-
-      point = OpenCvUtils.findProxyStartAction();
-      point = OpenCvUtils.isNullFindAndAction(point, "active_start_action");
+    public void setMaxCount(int maxCount) {
+        this.maxCount = maxCount;
     }
 
-    boolean b = executePoint(point);
-    if (!b) {
-      ShellUtils.sleepTime(2);
-      System.err.println("未找到开始行动 1");
-      ShellUtils.sleepTime(2);
-      maxCount = 0;
-      System.err.println("退出执行策略");
-      return;
+    public ProxyActionStrategy() {
     }
 
-    sleepTime(RandomUtils.getRandom(5, 8));
-
-    // 开始行动 2
-    System.out.println("开始行动 2");
-    point = OpenCvUtils.findStartAction();
-
-    if (point == null) {
-      ShellUtils.sleepTime(2);
-      System.err.println("未找到 开始行动 2");
-      ShellUtils.sleepTime(2);
-
-//            maxCount = 0;
-//            System.out.println("退出本策略");
-//            return;
-      // 处理智力不够情况
-      processNoWit3();
-    } else {
-      executePoint(point);
+    public ProxyActionStrategy(int num) {
+        this.num = num;
     }
 
-    if (maxCount == 0) {
-      OpenCvUtils.loopFind("exit_black.png", 3);
-      return;
+    public static ProxyActionStrategy count(int i) {
+        ProxyActionStrategy proxyActionStrategy = new ProxyActionStrategy();
+        proxyActionStrategy.maxCount = i;
+        return proxyActionStrategy;
     }
 
-    // 等待 战斗结束
-    System.out.println("等待战斗结束...");
-    sleepTime(RandomUtils.getRandom(120, 180));
-    // 退出结算页面
-    System.out.println("退出结算页面");
-    point = OpenCvUtils.findEndAction();
+    public static ProxyActionStrategy energy(int i) {
+        return new ProxyActionStrategy(i);
+    }
+
+    @Override
+    public void exec() {
+        numC = num;
+        OpenCvUtils.findAndAction(Action.UN_PROXY);
+
+        int s = 1;
+        do {
+            System.out.println("第" + s + "次执行");
+            try {
+                loopExec(s);
+            } catch (IOException ignored) {
+            } finally {
+                s++;
+            }
+        } while (s <= maxCount);
 
 
-    for (int i = 0; i < 6 && point == null; i++) {// 可能出现失误 重试
+//        执行完成后 会首页
+//        FactoryUtil.exec(new JumpChapterStrategy(0));
+    }
 
-      ShellUtils.sleepTime(2);
-      System.err.println("没有找到结算页面");
-      ShellUtils.sleepTime(2);
+    @Override
+    public void loopExec(int n) throws IOException {
+        // 开始行动 1
+        System.out.println("开始行动 1");
 
-      point = OpenCvUtils.findContinueAction();
+        Point point = OpenCvUtils.findProxyStartAction();
 
-      if (point == null) { // 可能是 等级升级
-        point = OpenCvUtils.findLevelUpAction();
-        if (point != null) {
-          OpenCvUtils.findAndAction("recover_wit.png");
-          System.out.println("检测到 等级升级界面");
+        if (point == null) {
+            throw new RuntimeException("未找到 开始行动 1");
         }
-      } else {
-        System.out.println("检测到 出现失误界面");
-      }
 
-      executePoint(point);
-      sleepTime(RandomUtils.getRandom(5, 8));
+        sleepTime(RandomUtils.getRandom(2, 3));
 
-      point = OpenCvUtils.findEndAction();
+        // 开始行动 2
+        System.out.println("开始行动 2");
+        point = OpenCvUtils.retryExec(START_ACTION2, 3);
+
+        if (point == null) {
+            ShellUtils.sleepTime(2);
+            System.err.println("未找到 开始行动 2");
+            ShellUtils.sleepTime(2);
+
+            processNoWit();
+        }
+
+        if (maxCount == 0) {
+            // 智力不够
+            OpenCvUtils.findAndAction(Action.CLOSE_4);
+            return;
+        }
+
+        // 等待 战斗结束
+        System.out.println("等待战斗结束...");
+        sleepTime(RandomUtils.getRandom(50, 60));
+
+        // 可能正在战斗
+        Point image = OpenCvUtils.findImage(Action.JIE_GUAN_ZUO_ZHAN);
+        while (image != null) {
+            System.out.println("战斗任在继续...");
+            sleepTime(10);
+            image = OpenCvUtils.findImage(Action.JIE_GUAN_ZUO_ZHAN);
+        }
+
+        // 退出结算页面
+        System.out.println("退出结算页面");
+        point = OpenCvUtils.findEndAction(2);
+
+        for (int i = 0; i < 6 && point == null; i++) {
+
+            ShellUtils.sleepTime(2);
+            System.err.println("没有找到结算页面");
+            ShellUtils.sleepTime(2);
+
+            // 可能出现失误 重试 继续结算
+            point = OpenCvUtils.findContinueAction();
+            if (point == null) { // 可能是 等级升级
+                point = OpenCvUtils.findLevelUpAction();
+                if (point != null) {
+                    OpenCvUtils.findAndAction("recover_wit.png");
+                    System.out.println("检测到 等级升级界面");
+                }
+            } else {
+                System.out.println("检测到 出现失误界面");
+            }
+
+            sleepTime(RandomUtils.getRandom(5, 8));
+
+            point = OpenCvUtils.findEndAction(1);
+        }
+
+        sleepTime(RandomUtils.getRandom(10, 20));
     }
 
-    executePoint(point);
 
-    sleepTime(RandomUtils.getRandom(10, 20));
-  }
+    // 处理没有理智的情况
+    private void processNoWit() {
+        System.out.println("处理可能没理智的情况");
+        if (num == 0) {
+            System.out.println("所配策略，不允许兑换源石");
+            maxCount = 0;
+            return;
+        }
 
-  private void processNoWit() {
-    if (num-- < 0) {
-      System.out.println("检测到已经兑换了" + num + "次源石了");
-      maxCount = 0;
-      return;
+        if (numC <= 0) {
+            System.out.println("检测到已经兑换了" + num + "次源石了");
+            maxCount = 0;
+            return;
+        }
+
+        numC--;
+
+        Point image = OpenCvUtils.findImage(Action.YUAN_SHI);
+        if (image != null) {
+            System.out.println("正在准备消耗一个源石,恢复智力...");
+        } else {
+            System.out.println("检测到提升智力的药物...");
+        }
+
+        OpenCvUtils.findAndAction(Action.YES_4);
+
+        ShellUtils.sleepTime(3);
+        Point point = OpenCvUtils.findProxyStartAction();
+        if (point == null) {
+            throw new RuntimeException("未找到 开始行动 1");
+        }
+
+        ShellUtils.sleepTime(3);
+        point = OpenCvUtils.findAndAction(Action.START_ACTION2);
+        if (point == null) {
+            throw new RuntimeException("未找到 开始行动 2");
+        }
     }
 
-    OpenCvUtils.findAndAction("next_black.png");
-
-    ShellUtils.sleepTime(3);
-    OpenCvUtils.findAndAction("start_action_btn.png");
-    ShellUtils.sleepTime(3);
-    OpenCvUtils.findAndAction("start_action_btn2.png");
-
-  }
-
-  private void processNoWit3() {
-    System.out.println("处理可能没理智的情况");
-    if (num == 1) {
-      processNoWit2();
-    } else {
-      processNoWit();
+    private void processNoWit2() {
+        if (OpenCvUtils.findImage("yingji_wit") != null) {
+            OpenCvUtils.findAndAction("next_black.png");
+        } else {
+            maxCount = 0;
+        }
     }
-  }
-
-  private void processNoWit2() {
-    if (OpenCvUtils.findImage("yingji_wit") != null) {
-      OpenCvUtils.findAndAction("next_black.png");
-    } else {
-      maxCount = 0;
-    }
-  }
 
 }

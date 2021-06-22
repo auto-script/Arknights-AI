@@ -134,10 +134,4 @@ public class PicOpenCvTest {
         Imgcodecs.imwrite(filePath + "sonuc6.jpg", source);
         System.out.println("Complated.");
     }
-
-
-    public static void main(String[] args) {
-
-        OpenCvUtils.findImage(ShellUtils.screenPath, "home.png", "home_t.png");
-    }
 }

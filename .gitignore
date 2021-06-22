@@ -17,3 +17,6 @@ buildNumber.properties
 /out/
 /current.png
 /screen.png
+/tempFile/
+/testFile/
+/build/

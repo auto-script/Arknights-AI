@@ -2,12 +2,10 @@ package com.mlick.mrfzai;
 
 import com.mlick.mrfzai.strategy.*;
 import com.mlick.mrfzai.utils.FactoryUtil;
-import com.mlick.mrfzai.utils.NoxUtils;
 import com.mlick.mrfzai.utils.ShellUtils;
 
 import java.time.LocalDateTime;
 
-import static com.mlick.mrfzai.core.Constants.isVmRunning;
 import static com.mlick.mrfzai.utils.ShellUtils.adbPath;
 
 /**
@@ -24,25 +22,19 @@ public class MainExec {
 
         adbPath = String.format(adbPath, "adb1036");
 
-        isVmRunning = NoxUtils.isRunning();
-
-        if (!isVmRunning) {
-            NoxUtils.startUp();
-            ShellUtils.sleepTime(3);
-            ShellUtils.sleepTime(50);
-
-            FactoryUtil.exec(LauncyStragery.class);
-
-            ShellUtils.sleepTime(10);
-        }
-
         MainAuto.getAdb(args);
+
+        FactoryUtil.exec(StartNoxStrategy.class);
+
+        FactoryUtil.exec(StartAppStrategy.class);
+
+        ShellUtils.sleepTime(10);
 
         FactoryUtil.exec(LoginStrategy.class);
 
         FactoryUtil.exec(IndexStrategy.class);
 
-//        FactoryUtil.exec(ActivityLimitTimeStrategy.class);
+        FactoryUtil.exec(ActivityLimitTimeStrategy.class);
 
         FactoryUtil.exec(EmailStrategy.class);
         FactoryUtil.exec(TaskStrategy.class);
@@ -74,7 +66,7 @@ public class MainExec {
         FactoryUtil.exec(PurchasingStrategy.class);
         FactoryUtil.exec(BuildStrategy.class);
 
-//        FactoryUtil.exec(ExitStragery.class);
+        FactoryUtil.exec(ExitNoxStrategy.class);
     }
 
     private static int getType() {

@@ -24,5 +24,16 @@ clean buildDependents -x test
 可将running.bat添加到windows的计划任务里面,定时启动
 
 
+## IDEA
+中文乱码
+在Help -> Edit Custom VM Options 下添加一行
 
+```
+-Dfile.encoding=UTF-8
+```
+
+## HELP
+
+在线ps
+http://www.photoeditora.com
 
