@@ -19,6 +19,7 @@ import static com.mlick.mrfzai.utils.ShellUtils.sleepTime;
  **/
 public class ProxyActionStrategy extends AutoStrategy implements AutoProxy {
 
+    private int exceptionNum;
     /**
      * 需要换购的原石数
      */
@@ -63,28 +64,28 @@ public class ProxyActionStrategy extends AutoStrategy implements AutoProxy {
         int s = 1;
         do {
             System.out.println("第" + s + "次执行");
-            try {
-                loopExec(s);
-            } catch (IOException ignored) {
-            } finally {
-                s++;
+            exceptionNum = 0;
+            loopExec(s);
+            s++;
+            if (exceptionNum > 3) {
+                throw new RuntimeException("Not Fount");
             }
+
         } while (s <= maxCount);
 
-
 //        执行完成后 会首页
-//        FactoryUtil.exec(new JumpChapterStrategy(0));
+        FactoryUtil.exec(new JumpChapterStrategy(0));
     }
 
     @Override
-    public void loopExec(int n) throws IOException {
+    public void loopExec(int n) {
         // 开始行动 1
         System.out.println("开始行动 1");
 
         Point point = OpenCvUtils.findProxyStartAction();
 
         if (point == null) {
-            throw new RuntimeException("未找到 开始行动 1");
+            exceptionNum++;
         }
 
         sleepTime(RandomUtils.getRandom(2, 3));
@@ -109,7 +110,7 @@ public class ProxyActionStrategy extends AutoStrategy implements AutoProxy {
 
         // 等待 战斗结束
         System.out.println("等待战斗结束...");
-        sleepTime(RandomUtils.getRandom(50, 60));
+        sleepTime(RandomUtils.getRandom(100, 120));
 
         // 可能正在战斗
         Point image = OpenCvUtils.findImage(Action.JIE_GUAN_ZUO_ZHAN);
@@ -133,8 +134,9 @@ public class ProxyActionStrategy extends AutoStrategy implements AutoProxy {
             point = OpenCvUtils.findContinueAction();
             if (point == null) { // 可能是 等级升级
                 point = OpenCvUtils.findLevelUpAction();
-                if (point != null) {
-                    OpenCvUtils.findAndAction("recover_wit.png");
+                Point rwPoint = OpenCvUtils.findImage(Action.RECOVER_WIT);
+                if (point != null || rwPoint != null) {
+                    ShellUtils.executePoint(point, true);
                     System.out.println("检测到 等级升级界面");
                 }
             } else {
@@ -146,7 +148,7 @@ public class ProxyActionStrategy extends AutoStrategy implements AutoProxy {
             point = OpenCvUtils.findEndAction(1);
         }
 
-        sleepTime(RandomUtils.getRandom(10, 20));
+        sleepTime(RandomUtils.getRandom(5, 10));
     }
 
 
@@ -170,8 +172,6 @@ public class ProxyActionStrategy extends AutoStrategy implements AutoProxy {
         Point image = OpenCvUtils.findImage(Action.YUAN_SHI);
         if (image != null) {
             System.out.println("正在准备消耗一个源石,恢复智力...");
-        } else {
-            System.out.println("检测到提升智力的药物...");
         }
 
         OpenCvUtils.findAndAction(Action.YES_4);
@@ -179,22 +179,15 @@ public class ProxyActionStrategy extends AutoStrategy implements AutoProxy {
         ShellUtils.sleepTime(3);
         Point point = OpenCvUtils.findProxyStartAction();
         if (point == null) {
-            throw new RuntimeException("未找到 开始行动 1");
+            exceptionNum++;
         }
 
         ShellUtils.sleepTime(3);
         point = OpenCvUtils.findAndAction(Action.START_ACTION2);
         if (point == null) {
-            throw new RuntimeException("未找到 开始行动 2");
+            exceptionNum++;
         }
     }
 
-    private void processNoWit2() {
-        if (OpenCvUtils.findImage("yingji_wit") != null) {
-            OpenCvUtils.findAndAction("next_black.png");
-        } else {
-            maxCount = 0;
-        }
-    }
 
 }

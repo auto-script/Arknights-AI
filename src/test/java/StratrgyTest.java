@@ -158,11 +158,17 @@ public class StratrgyTest {
 //        indexTest();
 //        FactoryUtil.exec(JumpChapterStrategy.class);
 
-        ProxyActionStrategy strategy = new ProxyActionStrategy();
-        int en = 10;
-        strategy.setEnergy(en);
-        strategy.setMaxCount(4 * en);
-        FactoryUtil.exec(strategy);
+        try {
+            ProxyActionStrategy strategy = new ProxyActionStrategy();
+            int en = 10;
+            strategy.setEnergy(en);
+            strategy.setMaxCount(4 * en);
+            FactoryUtil.exec(strategy);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            FactoryUtil.exec(ExitNoxStrategy.class);
+        }
     }
 
     //@Test

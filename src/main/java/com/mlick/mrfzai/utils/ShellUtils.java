@@ -176,6 +176,16 @@ public class ShellUtils {
         return execute(true, adbPath, "shell", getTapPhone(point));
     }
 
+    public static boolean executePoint(Point point, boolean flag) {
+        if (point == null && flag) {
+            tapPhone(480, 270);
+        }
+        if (point == null) {
+            return false;
+        }
+        return execute(true, adbPath, "shell", getTapPhone(point));
+    }
+
 
     public static boolean execute(String... cmd) {
         return execute(true, cmd);

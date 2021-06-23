@@ -16,7 +16,7 @@ public class StartNoxStrategy extends AutoStrategy {
         isVmRunning = NoxUtils.isRunning();
         if (!isVmRunning) {
             NoxUtils.startUp();
-            ShellUtils.sleepTime(60);
+            ShellUtils.sleepTime(66);
         }
 
     }

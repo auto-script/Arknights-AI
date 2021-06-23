@@ -52,7 +52,7 @@ public class OpenCvUtils {
 
 
     public static Point findLevelUpAction() {
-        return findImage("level_up_btn.png");
+        return findImage(LEVEL_UP_BTN);
     }
 
     public static Point findStart() {
@@ -303,7 +303,7 @@ public class OpenCvUtils {
             System.out.println("循环查找第:" + (i + 1) + "次");
             ShellUtils.sleepTime();
         }
-        System.err.println(String.format("【%s】循环%d次后，未找到,待处理", action.getName(), Constants.RETRY_COUNT));
+        System.err.println(String.format("【%s】循环%d次后，未找到,待处理", action.getName(), count));
         return null;
     }
 

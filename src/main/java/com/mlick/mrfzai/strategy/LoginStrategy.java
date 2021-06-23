@@ -32,8 +32,9 @@ public class LoginStrategy extends AutoStrategy {
 
             // 记忆已经模糊，请重新输入登录信息
             Point jiYiMoHu = OpenCvUtils.findImage(Action.JI_YI_MO_HU);
-            if (jiYiMoHu != null) {
-                ShellUtils.sleepTime();
+
+            if (andAction != null && jiYiMoHu == null) {
+                throw new RuntimeException("检测到异常");
             }
 
             if (andAction != null) {
