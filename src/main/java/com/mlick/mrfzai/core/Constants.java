@@ -16,7 +16,9 @@ public class Constants {
     public volatile static String resultPath = "result.png";
 
 
-    public static int SLEEP_TIME = 5;
-    public static int RETRY_COUNT = 5;
+    public final static int SLEEP_TIME = 5;
+    public final static int RETRY_COUNT = 5;
+
+    public final static int EXIST_FILE_COUNT = 8;
 
 }

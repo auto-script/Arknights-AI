@@ -19,7 +19,6 @@ import static com.mlick.mrfzai.utils.ShellUtils.sleepTime;
  **/
 public class ProxyActionStrategy extends AutoStrategy implements AutoProxy {
 
-    private int exceptionNum;
     /**
      * 需要换购的原石数
      */
@@ -64,13 +63,13 @@ public class ProxyActionStrategy extends AutoStrategy implements AutoProxy {
         int s = 1;
         do {
             System.out.println("第" + s + "次执行");
-            exceptionNum = 0;
-            loopExec(s);
-            s++;
-            if (exceptionNum > 3) {
-                throw new RuntimeException("Not Fount");
+            try {
+                loopExec(s);
+            } catch (Exception e) {
+                System.err.println(e.toString());
+                return;
             }
-
+            s++;
         } while (s <= maxCount);
 
 //        执行完成后 会首页
@@ -85,7 +84,7 @@ public class ProxyActionStrategy extends AutoStrategy implements AutoProxy {
         Point point = OpenCvUtils.findProxyStartAction();
 
         if (point == null) {
-            exceptionNum++;
+            throw new RuntimeException("Not Find 开始行动 1");
         }
 
         sleepTime(RandomUtils.getRandom(2, 3));
@@ -179,13 +178,13 @@ public class ProxyActionStrategy extends AutoStrategy implements AutoProxy {
         ShellUtils.sleepTime(3);
         Point point = OpenCvUtils.findProxyStartAction();
         if (point == null) {
-            exceptionNum++;
+            throw new RuntimeException("Not Find 开始行动 1");
         }
 
         ShellUtils.sleepTime(3);
         point = OpenCvUtils.findAndAction(Action.START_ACTION2);
         if (point == null) {
-            exceptionNum++;
+            throw new RuntimeException("Not Find 开始行动 1");
         }
     }
 

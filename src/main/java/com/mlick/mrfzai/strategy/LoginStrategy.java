@@ -22,25 +22,31 @@ public class LoginStrategy extends AutoStrategy {
 
         Point point, loginPoint;
 
-        point = OpenCvUtils.findImage(Action.START_WAKE);
+        point = OpenCvUtils.findStartWake();
         if (point != null) {
             ShellUtils.executePoint(point);
+
             ShellUtils.sleepTime(RandomUtils.getRandom(6, 8));
 
+            if (OpenCvUtils.findImage(Action.LOGIN_LOADING) != null) {
+                System.out.println("正在登录中...");
+                return;
+            }
 
-            Point andAction = OpenCvUtils.findImage(Action.YES_3);
-
+            Point yesAction = OpenCvUtils.findImage(Action.YES_3);
             // 记忆已经模糊，请重新输入登录信息
             Point jiYiMoHu = OpenCvUtils.findImage(Action.JI_YI_MO_HU);
 
-            if (andAction != null && jiYiMoHu == null) {
+            if (yesAction != null && jiYiMoHu == null) {
                 throw new RuntimeException("检测到异常");
             }
 
-            if (andAction != null) {
-                ShellUtils.executePoint(andAction);
+            if (yesAction != null) {
+                ShellUtils.executePoint(yesAction);
             }
         }
+
+        ShellUtils.sleepTime();
 
         loginPoint = OpenCvUtils.findLoginAccountBtn();
 

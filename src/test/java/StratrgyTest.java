@@ -155,27 +155,31 @@ public class StratrgyTest {
 //        FactoryUtil.exec(StartNoxStrategy.class);
 //        startAppTest();
 //        loginTest();
+//
 //        indexTest();
-//        FactoryUtil.exec(JumpChapterStrategy.class);
 
-        try {
-            ProxyActionStrategy strategy = new ProxyActionStrategy();
-            int en = 10;
-            strategy.setEnergy(en);
-            strategy.setMaxCount(4 * en);
-            FactoryUtil.exec(strategy);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }finally {
-            FactoryUtil.exec(ExitNoxStrategy.class);
-        }
+        FactoryUtil.exec(JumpChapterStrategy.type(JumpChapterStrategy.TYPE.MONEY));
+
+        ProxyActionStrategy strategy = new ProxyActionStrategy();
+        int en = 10;
+        strategy.setEnergy(en);
+        strategy.setMaxCount(6 * en);
+        FactoryUtil.exec(strategy);
+
+//        FactoryUtil.exec(ExitNoxStrategy.class);
     }
 
-    //@Test
+    @Test
     public void IWantExperience() {
-        allAuto();
-        FactoryUtil.exec(new JumpChapterStrategy(1));
-        FactoryUtil.exec(ProxyActionStrategy.class);
+        FactoryUtil.exec(new JumpChapterStrategy(JumpChapterStrategy.TYPE.EXPERIENCE));
+
+        ProxyActionStrategy strategy = new ProxyActionStrategy();
+        int en = 7;
+        strategy.setEnergy(en);
+        strategy.setMaxCount(4 * en);
+        FactoryUtil.exec(strategy);
+
+        FactoryUtil.exec(ExitNoxStrategy.class);
     }
 
     /**

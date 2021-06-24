@@ -60,7 +60,7 @@ public class OpenCvUtils {
     }
 
     public static Point findStartWake() {
-        return findImage("start_wake.png");
+        return findImage(START_WAKE);
     }
 
     public static Point findEmail() {
@@ -85,7 +85,7 @@ public class OpenCvUtils {
 
 
     public static Point findLoginAccountBtn() {
-        return findImage(LOGIN_ACCOUNT_BTN);
+        return retryExec(LOGIN_ACCOUNT_BTN, 3);
     }
 
     public static Point findAndAction(String templateImg) {
@@ -95,7 +95,7 @@ public class OpenCvUtils {
     }
 
     public static Point findAndAction(Action action) {
-        Point point = findImage(action.getImg());
+        Point point = findImage(action);
         ShellUtils.executePoint(point);
         return point;
     }
@@ -113,7 +113,25 @@ public class OpenCvUtils {
 
 
     public static Point findImage(Action action, int method) {
-        return findImage(action.getImg(), method);
+        Point image = findImage(action.getImg(), method);
+
+        if (image != null) {
+            return image;
+        }
+
+        String[] other = action.getOther();
+        if (other == null) {
+            return image;
+        }
+
+        for (String s : other) {
+            image = findImage(s, false, Constants.DESIRED_ACCURACY, method);
+            if (image != null) {
+                return image;
+            }
+        }
+
+        return image;
     }
 
 
@@ -296,7 +314,10 @@ public class OpenCvUtils {
 
     public static Point retryExec(Action action, int count) {
         for (int i = 0; i < count; i++) {
-            Point point = OpenCvUtils.findAndAction(action, Constants.DESIRED_ACCURACY);
+            if (i == 1){
+                System.out.println("即将循环查找" + count + "次");
+            }
+            Point point = OpenCvUtils.findAndAction(action);
             if (point != null) {
                 return point;
             }

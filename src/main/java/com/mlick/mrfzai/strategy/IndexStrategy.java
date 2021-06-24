@@ -15,6 +15,7 @@ import static com.mlick.mrfzai.core.Action.EXIT_1;
 public class IndexStrategy extends AutoStrategy {
     @Override
     public void exec() {
+        OpenCvUtils.retryExec(EXIT_1,3);
         OpenCvUtils.loopFindIfNullExit(EXIT_1);
     }
 

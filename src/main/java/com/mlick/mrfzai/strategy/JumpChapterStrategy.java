@@ -13,10 +13,13 @@ import org.opencv.core.Point;
  **/
 public class JumpChapterStrategy extends AutoStrategy {
 
-    private int stage = 2;
     private TYPE type = TYPE.MONEY;
 
-    enum TYPE {
+    public static AutoStrategy type(TYPE type) {
+        return new JumpChapterStrategy(type);
+    }
+
+    public enum TYPE {
         INDEX,
         MONEY,
         EXPERIENCE,
@@ -29,7 +32,6 @@ public class JumpChapterStrategy extends AutoStrategy {
 
     public JumpChapterStrategy(int i) {
         super();
-        this.stage = i;
     }
 
     public JumpChapterStrategy(TYPE i) {
@@ -39,11 +41,13 @@ public class JumpChapterStrategy extends AutoStrategy {
 
     @Override
     public void exec() {
-        Point indexAction = OpenCvUtils.findAndAction(Action.INDEX_TERMINAL);
+        Point indexAction = OpenCvUtils.retryExec(Action.INDEX_TERMINAL, 3);
         if (indexAction == null) {
             System.err.println("没有发现在首页,待处理");
             return;
         }
+
+        ShellUtils.sleepTime();
 
         switch (type) {
             case INDEX:// 首页
@@ -52,7 +56,7 @@ public class JumpChapterStrategy extends AutoStrategy {
                 OpenCvUtils.findAndAction("home_index.png");
                 break;
             case EXPERIENCE:// 跳转到经验
-                execJump("fight_experience.png", "LS-5.png");
+                execJump(Action.FIGHT_EXPERIENCE, Action.LS_5);
                 break;
             case MONEY:// 跳转到龙门币
                 execJump(Action.FIGHT_MONEY, Action.CE_5);
@@ -63,28 +67,30 @@ public class JumpChapterStrategy extends AutoStrategy {
             default:
                 break;
         }
-
     }
 
-    private void execJump(String s, String s2) {
-        Point point = OpenCvUtils.findAndAction(Action.GOODS);
-        if (point == null) {
-            return;
-        }
-
-        int i = loopFindAction(s, 1);
-        if (i == 0) {
-            System.out.println("拖动...");
-            ShellUtils.swipePhone(255, 255, 150, 255);
-            i = loopFindAction(s, 1);
-        }
-        if (i == 0) {
-            loopFindAction("fight_experience", 1);
-            loopFindAction("LS-5.png", 1);
-        } else {
-            loopFindAction(s2, 1);
-        }
-    }
+//    private void execJump(String s, String s2) {
+//        Point point = OpenCvUtils.retryExec(Action.GOODS,3);
+//        if (point == null) {
+//            return;
+//        }
+//
+//        int i = loopFindAction(s, 1);
+//        if (i == 0) {
+//            System.out.println("拖动...");
+//            ShellUtils.swipePhone(255, 255, 150, 255);
+//            i = loopFindAction(s, 1);
+//        }
+//
+//        if (i == 0) {
+//            loopFindAction("fight_experience", 1);
+//            loopFindAction("LS-5.png", 1);
+//        } else {
+//            loopFindAction(s2, 1);
+//        }
+//
+//
+//    }
 
     private void execJump(Action s, Action s2) {
         Point point = OpenCvUtils.retryExec(Action.GOODS, 3);
@@ -99,7 +105,11 @@ public class JumpChapterStrategy extends AutoStrategy {
 
         ShellUtils.sleepTime();
 
-        OpenCvUtils.findAndAction(s2);
+        Point exec = OpenCvUtils.retryExec(s2, 3);
+
+        if (exec == null) {
+            throw new RuntimeException(s2.getName() + "未找到");
+        }
     }
 
     private int loopFindAction(String s, int i) {

@@ -28,8 +28,9 @@ public enum Action {
     LOGIN_MLICK_INPUT("login_mlick_input", "18321295235"),
     LEVEL_UP_BTN("level_up_btn", "等级提升"),
     RECOVER_WIT("recover_wit", "理智已恢复"),
-    START("start", "START"),
+    START("start", "START", 480, 512, true),
     START_WAKE("start_wake2", "开始唤醒"),
+    LOGIN_LOADING("login_loading", "登录中"),
     EMAIL_BTN("email_btn", "邮箱"),
     EMAIL_ACCEPT_ALL("email_accept_all", "收取所有邮件"),
     EMAIL_DELETE_BTN("email_delete_btn", "删除已读邮件"),
@@ -40,27 +41,65 @@ public enum Action {
     LOGIN_PASSWORD_INPUT("login_password_input", "密码输入"),
     LOGIN_BTN("login_btn", "登录"),
     ENTER_BTN("enter_btn", "确定"),
-    GOODS("goods2", "资源收集"),
+    GOODS("goods2", "资源收集", "goods3"),
     FIGHT_MONEY("fight_money2", "货物运送"),
+    FIGHT_EXPERIENCE("fight_experience2", " 战术演习", "fight_experience3"),
+
+
     CE_5("CE-5", "CE-5"),
+    LS_5("LS-5", "LS-5", "LS-5_u"),
+
+
     GET_CREDIT("get_credit", "收取信用"),
     ;
 
     private String img;
     private String name;
+    private String[] other;
 
+    private int x;
+    private int y;
+    private boolean enableXY = false;
 
     public static Map<String, String> DESC = new HashMap<>();
 
     static {
         for (Action action : Action.values()) {
             DESC.put(action.getImg(), action.getName());
+            if (action.other == null) {
+                continue;
+            }
+            for (String s : action.other) {
+                DESC.put(s, action.getName());
+            }
         }
     }
 
     Action(String img, String name) {
         this.img = img + ".png";
         this.name = name;
+    }
+
+    Action(String img, String name, int x, int y, boolean enableXY) {
+        this.img = img + ".png";
+        this.name = name;
+        this.x = x;
+        this.y = y;
+        this.enableXY = enableXY;
+    }
+
+    Action(String img, String name, String... imgs) {
+        this.img = img + ".png";
+        this.name = name;
+        this.other = imgs;
+    }
+
+    Action(String img, String name, int x, int y, boolean enableXY, String... imgs) {
+        this.img = img + ".png";
+        this.name = name;
+        this.other = imgs;
+        this.x = x;
+        this.y = y;
     }
 
 
@@ -70,5 +109,9 @@ public enum Action {
 
     public String getName() {
         return name;
+    }
+
+    public String[] getOther() {
+        return other;
     }
 }

@@ -19,6 +19,8 @@ public class ExitNoxStrategy extends AutoStrategy {
 
         NoxUtils.shutDown();
 
+        System.out.println("Exit System!!!");
+
         System.exit(0);
         
     }

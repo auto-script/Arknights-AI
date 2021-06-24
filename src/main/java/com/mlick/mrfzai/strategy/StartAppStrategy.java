@@ -24,15 +24,24 @@ public class StartAppStrategy extends AutoStrategy {
         ShellUtils.sleepTime(15);
 
         // 点击开始 按钮
-        OpenCvUtils.retryExec(Action.START,2);
+        OpenCvUtils.retryExec(Action.START, 2);
 
         ShellUtils.sleepTime(15);
+
+
+        // 检测是否已经登录过
+
+        Point startWake = OpenCvUtils.findStartWake();
+        if (startWake != null){
+            System.out.println("成功启动");
+            return;
+        }
 
         // 检测是否有更新操作
         Point nextWhiteAction = OpenCvUtils.findNextWhiteAction();
         if (nextWhiteAction != null) {
             ShellUtils.executePoint(nextWhiteAction);
-        } else if (OpenCvUtils.findLoginAccountBtn() != null) {
+        } else if (OpenCvUtils.findImage(Action.LOGIN_ACCOUNT_BTN) != null) {
             System.out.println("成功启动");
             return;
         }

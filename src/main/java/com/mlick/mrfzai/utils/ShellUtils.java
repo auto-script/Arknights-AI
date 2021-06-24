@@ -7,11 +7,10 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+import static com.mlick.mrfzai.core.Constants.EXIST_FILE_COUNT;
 import static com.mlick.mrfzai.core.Constants.FILE_TEMP_PATH;
 
 /**
@@ -63,9 +62,37 @@ public class ShellUtils {
     }
 
     private static void checkFileMore() {
+        File pathTempDir = new File(FILE_TEMP_PATH);
 
+        if (!pathTempDir.isDirectory()) {
+            return;
+        }
+
+        File[] files = pathTempDir.listFiles((dir, name) -> name.endsWith(".png"));
+
+        if (files == null || files.length == 0) {
+            return;
+        }
+        
+        // 按照最新修改的倒序排序
+        Arrays.sort(files, (f1, f2) -> {
+            long diff = f1.lastModified() - f2.lastModified();
+            if (diff > 0)
+                return -1;
+            else if (diff == 0)
+                return 0;
+            else
+                return 1;
+        });
+
+        for (int i = EXIST_FILE_COUNT; i < files.length; i++) {
+            files[i].deleteOnExit();
+        }
     }
 
+    public static void main(String[] args) {
+        checkFileMore();
+    }
 
     public static ArrayList<String> getConnectedDevices() {
         ArrayList<String> devices = new ArrayList<>();
@@ -242,13 +269,6 @@ public class ShellUtils {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-    }
-
-    public static void main(String[] args) {
-        sleepTime(10);
-
-
-        System.out.println("finish");
     }
 
 

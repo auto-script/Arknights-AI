@@ -14,10 +14,14 @@ public class StartNoxStrategy extends AutoStrategy {
     @Override
     public void exec() {
         isVmRunning = NoxUtils.isRunning();
-        if (!isVmRunning) {
-            NoxUtils.startUp();
-            ShellUtils.sleepTime(66);
+
+        if (isVmRunning) {
+            System.out.println("Nox.exe is Running");
+            return;
         }
+
+        NoxUtils.startUp();
+        ShellUtils.sleepTime(66);
 
     }
 }
