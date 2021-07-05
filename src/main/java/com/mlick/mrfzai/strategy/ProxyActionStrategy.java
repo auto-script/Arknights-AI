@@ -6,10 +6,7 @@ import com.mlick.mrfzai.core.AutoStrategy;
 import com.mlick.mrfzai.utils.*;
 import org.opencv.core.Point;
 
-import java.io.IOException;
-
 import static com.mlick.mrfzai.core.Action.START_ACTION2;
-import static com.mlick.mrfzai.utils.ShellUtils.*;
 import static com.mlick.mrfzai.utils.ShellUtils.sleepTime;
 
 /**
@@ -22,7 +19,7 @@ public class ProxyActionStrategy extends AutoStrategy implements AutoProxy {
     /**
      * 需要换购的原石数
      */
-    private int num = 0;
+    private int energyNum = 0;
     private int numC;
 
     /**
@@ -31,7 +28,19 @@ public class ProxyActionStrategy extends AutoStrategy implements AutoProxy {
     private int maxCount = Integer.MAX_VALUE;
 
     public void setEnergy(int num) {
-        this.num = num;
+        this.energyNum = num;
+    }
+
+    public static ProxyActionStrategy energy(int num) {
+        ProxyActionStrategy proxyActionStrategy = new ProxyActionStrategy();
+        proxyActionStrategy.setEnergy(num);
+        return proxyActionStrategy;
+    }
+
+    public static ProxyActionStrategy maxCount(int maxCount) {
+        ProxyActionStrategy proxyActionStrategy = new ProxyActionStrategy();
+        proxyActionStrategy.setMaxCount(maxCount);
+        return proxyActionStrategy;
     }
 
     public void setMaxCount(int maxCount) {
@@ -41,23 +50,14 @@ public class ProxyActionStrategy extends AutoStrategy implements AutoProxy {
     public ProxyActionStrategy() {
     }
 
-    public ProxyActionStrategy(int num) {
-        this.num = num;
+    public ProxyActionStrategy(int maxCount) {
+        this.maxCount = maxCount;
     }
 
-    public static ProxyActionStrategy count(int i) {
-        ProxyActionStrategy proxyActionStrategy = new ProxyActionStrategy();
-        proxyActionStrategy.maxCount = i;
-        return proxyActionStrategy;
-    }
-
-    public static ProxyActionStrategy energy(int i) {
-        return new ProxyActionStrategy(i);
-    }
 
     @Override
     public void exec() {
-        numC = num;
+        numC = energyNum;
         OpenCvUtils.findAndAction(Action.UN_PROXY);
 
         int s = 1;
@@ -67,13 +67,15 @@ public class ProxyActionStrategy extends AutoStrategy implements AutoProxy {
                 loopExec(s);
             } catch (Exception e) {
                 System.err.println(e.toString());
-                return;
+                break;
             }
             s++;
         } while (s <= maxCount);
 
+
+        System.out.println("任务执行完毕，一共" + s + "次执行");
 //        执行完成后 会首页
-        FactoryUtil.exec(new JumpChapterStrategy(0));
+        FactoryUtil.exec(JumpChapterStrategy.INDEX);
     }
 
     @Override
@@ -91,7 +93,7 @@ public class ProxyActionStrategy extends AutoStrategy implements AutoProxy {
 
         // 开始行动 2
         System.out.println("开始行动 2");
-        point = OpenCvUtils.retryExec(START_ACTION2, 3);
+        point = OpenCvUtils.retryExec(START_ACTION2, 2);
 
         if (point == null) {
             ShellUtils.sleepTime(2);
@@ -104,7 +106,7 @@ public class ProxyActionStrategy extends AutoStrategy implements AutoProxy {
         if (maxCount == 0) {
             // 智力不够
             OpenCvUtils.findAndAction(Action.CLOSE_4);
-            return;
+            throw new RuntimeException("Not Wit");
         }
 
         // 等待 战斗结束
@@ -118,6 +120,7 @@ public class ProxyActionStrategy extends AutoStrategy implements AutoProxy {
             sleepTime(10);
             image = OpenCvUtils.findImage(Action.JIE_GUAN_ZUO_ZHAN);
         }
+
 
         // 退出结算页面
         System.out.println("退出结算页面");
@@ -154,14 +157,14 @@ public class ProxyActionStrategy extends AutoStrategy implements AutoProxy {
     // 处理没有理智的情况
     private void processNoWit() {
         System.out.println("处理可能没理智的情况");
-        if (num == 0) {
+        if (energyNum == 0) {
             System.out.println("所配策略，不允许兑换源石");
             maxCount = 0;
             return;
         }
 
         if (numC <= 0) {
-            System.out.println("检测到已经兑换了" + num + "次源石了");
+            System.out.println("检测到已经兑换了" + energyNum + "次源石了");
             maxCount = 0;
             return;
         }
@@ -171,6 +174,7 @@ public class ProxyActionStrategy extends AutoStrategy implements AutoProxy {
         Point image = OpenCvUtils.findImage(Action.YUAN_SHI);
         if (image != null) {
             System.out.println("正在准备消耗一个源石,恢复智力...");
+            System.out.println("剩余:"+numC);
         }
 
         OpenCvUtils.findAndAction(Action.YES_4);
@@ -184,7 +188,7 @@ public class ProxyActionStrategy extends AutoStrategy implements AutoProxy {
         ShellUtils.sleepTime(3);
         point = OpenCvUtils.findAndAction(Action.START_ACTION2);
         if (point == null) {
-            throw new RuntimeException("Not Find 开始行动 1");
+            throw new RuntimeException("Not Find 开始行动 2");
         }
     }
 

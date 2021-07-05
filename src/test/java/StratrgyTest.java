@@ -9,53 +9,21 @@ import com.mlick.mrfzai.utils.OpenCvUtils;
 import com.mlick.mrfzai.utils.ShellUtils;
 import org.junit.Before;
 import org.junit.Test;
-import org.opencv.core.Point;
 import org.opencv.imgproc.Imgproc;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Base64;
 import java.util.Objects;
 import java.util.UUID;
 
-import static com.mlick.mrfzai.utils.RandomUtils.getRandom;
-import static com.mlick.mrfzai.utils.ShellUtils.*;
+import static com.mlick.mrfzai.utils.ShellUtils.adbPath;
 
 /**
  * @author lixiangxin
  * @date 2019/6/11 17:29
  **/
 public class StratrgyTest {
-
-
-    private static void loopExec() {
-        // 开始行动 1
-        System.out.println("开始行动 1");
-
-        Point point = OpenCvUtils.findProxyStartAction();
-
-        execute(adbPath, "shell", getTapPhone(1128, 660));
-        execute(adbPath, "shell", getTapPhone(1128, 660));
-        execute(adbPath, "shell", getTapPhone(1128, 660));
-
-        // 开始行动 2
-        System.out.println("开始行动 2");
-        execute(adbPath, "shell", getTapPhone(1128, 500));
-
-        int waitMinute = getRandom(120, 180);
-
-        // 等待 战斗结束
-        sleepTime(waitMinute);
-
-        // 可能出现 失误
-//    execute(adbPath, "shell", getTapPhone(1155, 465));
-//    sleepTime(3);
-
-        // 退出结算页面
-        System.out.println("退出结算页面");
-        execute(adbPath, "shell", getTapPhone(1128, 660));
-    }
 
     @Before
     public void init() {
@@ -82,29 +50,30 @@ public class StratrgyTest {
         new LoginStrategy().autoLogin();
     }
 
-
     @Test
     public void indexTest() {
         FactoryUtil.exec(IndexStrategy.class);
     }
 
-    //@Test
+    @Test
+    public void comeInIndex() {
+        FactoryUtil.exec(StartNoxStrategy.class);
+        startAppTest();
+        loginTest();
+
+        indexTest();
+    }
+
+    @Test
     public void acceptEmail() {
         AutoStrategy autoStrategy = new EmailStrategy();
         autoStrategy.exec();
-    }
-
-    //@Test
-    public void devices() throws IOException {
-        ShellUtils.executeByResult(adbPath, "connect 106.12.196.97");
-        ShellUtils.screenCap();
     }
 
     @Test
     public void testBuild() {
         FactoryUtil.exec(BuildStrategy.class);
     }
-
 
     @Test
     public void testExit() {
@@ -113,71 +82,48 @@ public class StratrgyTest {
 
     @Test
     public void proxyStrategy() {
-        FactoryUtil.exec(new JumpChapterStrategy(2));
-
         ProxyActionStrategy strategy = new ProxyActionStrategy();
-        strategy.setMaxCount(4);
-        strategy.setEnergy(0);
+        strategy.setEnergy(4);
         FactoryUtil.exec(strategy);
+
+        FactoryUtil.exec(ExitNoxStrategy.class);
     }
-
-    //@Test
-    public void allAuto() {
-        FactoryUtil.exec(LoginStrategy.class);
-        FactoryUtil.exec(IndexStrategy.class);
-    }
-
-
-    //@Test
-    public void dayTask() {
-
-        //处理可能出现其它情况 随机点击一处屏幕
-        ShellUtils.tapPhone(255, 255);
-
-        allAuto();
-
-        FactoryUtil.exec(new JumpChapterStrategy(1));
-//    FactoryUtil.exec(new ProxyActionStrategy(10));
-//
-//    FactoryUtil.exec(new JumpChapterStrategy(2));
-        FactoryUtil.exec(ProxyActionStrategy.class);
-    }
-
-    //@Test
-    public void dayTask2() {
-        allAuto();
-        FactoryUtil.exec(BuildStrategy.class);
-    }
-
 
     @Test
     public void IWantMoreMoney() {
-//        FactoryUtil.exec(StartNoxStrategy.class);
-//        startAppTest();
-//        loginTest();
-//
-//        indexTest();
+        comeInIndex();
 
-        FactoryUtil.exec(JumpChapterStrategy.type(JumpChapterStrategy.TYPE.MONEY));
+        FactoryUtil.exec(JumpChapterStrategy.MONEY);
+        FactoryUtil.exec(ProxyActionStrategy.energy(10));
 
-        ProxyActionStrategy strategy = new ProxyActionStrategy();
-        int en = 10;
-        strategy.setEnergy(en);
-        strategy.setMaxCount(6 * en);
-        FactoryUtil.exec(strategy);
-
-//        FactoryUtil.exec(ExitNoxStrategy.class);
+        FactoryUtil.exec(ExitNoxStrategy.class);
     }
 
     @Test
     public void IWantExperience() {
-        FactoryUtil.exec(new JumpChapterStrategy(JumpChapterStrategy.TYPE.EXPERIENCE));
+        comeInIndex();
 
-        ProxyActionStrategy strategy = new ProxyActionStrategy();
-        int en = 7;
-        strategy.setEnergy(en);
-        strategy.setMaxCount(4 * en);
-        FactoryUtil.exec(strategy);
+        FactoryUtil.exec(JumpChapterStrategy.EXPERIENCE);
+
+        FactoryUtil.exec(ProxyActionStrategy.energy(10));
+        FactoryUtil.exec(ExitNoxStrategy.class);
+    }
+
+    @Test
+    public void testJumpIndex() {
+        FactoryUtil.exec(JumpChapterStrategy.INDEX);
+    }
+
+    @Test
+    public void customTask() {
+
+//        comeInIndex();
+
+        FactoryUtil.exec(JumpChapterStrategy.MONEY);
+        FactoryUtil.exec(ProxyActionStrategy.energy(20));
+
+        FactoryUtil.exec(JumpChapterStrategy.EXPERIENCE);
+        FactoryUtil.exec(ProxyActionStrategy.energy(30));
 
         FactoryUtil.exec(ExitNoxStrategy.class);
     }
@@ -194,30 +140,6 @@ public class StratrgyTest {
     //@Test
     public void t1() {
         ShellUtils.swipePhone(255, 255, 200, 255);
-    }
-
-
-    //@Test
-    public void t2() {
-
-//    Point andAction = OpenCvUtils.findAndAction("home_fight.png");
-//    if (andAction == null) {
-//
-//      OpenCvUtils.findAndAction("home.png");
-//      ShellUtils.sleepTime(3);
-//      OpenCvUtils.findAndAction("fight.png");
-//      ShellUtils.sleepTime(8);
-//    }
-//
-//    OpenCvUtils.findAndAction("goods.png");
-//
-//    ShellUtils.swipePhone(255, 255, 155, 255);
-
-        Point point = OpenCvUtils.findImage("fight_money.png");
-        ShellUtils.executePoint(point);
-
-        ShellUtils.screenCap();
-
     }
 
     //@Test
@@ -277,17 +199,10 @@ public class StratrgyTest {
     }
 
     @Test
-    public void testJumpHome() {
-        FactoryUtil.exec(new JumpChapterStrategy(2));
-    }
-
-
-    @Test
     public void tA2() {
         /** 刷活动图*/
         FactoryUtil.exec(ActivityHuoLanZhiXinStrategy.get("OF-7"));
-        FactoryUtil.exec(ProxyActionStrategy.energy(2));
-        FactoryUtil.exec(ProxyActionStrategy.count(15));
+        FactoryUtil.exec(ProxyActionStrategy.maxCount(15));
 
         FactoryUtil.exec(ActivityHuoLanZhiXinStrategy.get("OF-8"));
         FactoryUtil.exec(ProxyActionStrategy.class);

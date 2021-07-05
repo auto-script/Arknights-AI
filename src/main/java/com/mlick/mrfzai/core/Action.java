@@ -45,6 +45,8 @@ public enum Action {
     FIGHT_MONEY("fight_money2", "货物运送"),
     FIGHT_EXPERIENCE("fight_experience2", " 战术演习", "fight_experience3"),
 
+    HOME("home","顶部首页"),
+    HOME_INDEX("home_index","顶部首页跳转"),
 
     CE_5("CE-5", "CE-5"),
     LS_5("LS-5", "LS-5", "LS-5_u"),

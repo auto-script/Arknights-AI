@@ -7,6 +7,8 @@ import com.mlick.mrfzai.utils.RandomUtils;
 import com.mlick.mrfzai.utils.ShellUtils;
 import org.opencv.core.Point;
 
+import java.time.LocalDateTime;
+
 /**
  * @author lixiangxin
  * @date 2019/7/11 11:29
@@ -15,23 +17,20 @@ public class JumpChapterStrategy extends AutoStrategy {
 
     private TYPE type = TYPE.MONEY;
 
+    public static JumpChapterStrategy INDEX = new JumpChapterStrategy(TYPE.INDEX);
+    public static JumpChapterStrategy MONEY = new JumpChapterStrategy(TYPE.MONEY);
+    public static JumpChapterStrategy EXPERIENCE = new JumpChapterStrategy(TYPE.EXPERIENCE);
+    public static JumpChapterStrategy BUILDING = new JumpChapterStrategy(TYPE.BUILDING);
+
     public static AutoStrategy type(TYPE type) {
         return new JumpChapterStrategy(type);
     }
 
-    public enum TYPE {
+    private enum TYPE {
         INDEX,
         MONEY,
         EXPERIENCE,
         BUILDING
-    }
-
-    public JumpChapterStrategy() {
-    }
-
-
-    public JumpChapterStrategy(int i) {
-        super();
     }
 
     public JumpChapterStrategy(TYPE i) {
@@ -41,19 +40,12 @@ public class JumpChapterStrategy extends AutoStrategy {
 
     @Override
     public void exec() {
-        Point indexAction = OpenCvUtils.retryExec(Action.INDEX_TERMINAL, 3);
-        if (indexAction == null) {
-            System.err.println("没有发现在首页,待处理");
-            return;
-        }
-
         ShellUtils.sleepTime();
-
         switch (type) {
-            case INDEX:// 首页
-                OpenCvUtils.findAndAction("home.png");
-                ShellUtils.sleepTime(3);
-                OpenCvUtils.findAndAction("home_index.png");
+            case INDEX:
+                OpenCvUtils.findAndAction(Action.HOME);
+                ShellUtils.sleepTime(1);
+                OpenCvUtils.findAndAction(Action.HOME_INDEX);
                 break;
             case EXPERIENCE:// 跳转到经验
                 execJump(Action.FIGHT_EXPERIENCE, Action.LS_5);
@@ -69,30 +61,13 @@ public class JumpChapterStrategy extends AutoStrategy {
         }
     }
 
-//    private void execJump(String s, String s2) {
-//        Point point = OpenCvUtils.retryExec(Action.GOODS,3);
-//        if (point == null) {
-//            return;
-//        }
-//
-//        int i = loopFindAction(s, 1);
-//        if (i == 0) {
-//            System.out.println("拖动...");
-//            ShellUtils.swipePhone(255, 255, 150, 255);
-//            i = loopFindAction(s, 1);
-//        }
-//
-//        if (i == 0) {
-//            loopFindAction("fight_experience", 1);
-//            loopFindAction("LS-5.png", 1);
-//        } else {
-//            loopFindAction(s2, 1);
-//        }
-//
-//
-//    }
-
     private void execJump(Action s, Action s2) {
+        Point indexAction = OpenCvUtils.retryExec(Action.INDEX_TERMINAL, 3);
+        if (indexAction == null) {
+            System.err.println("没有发现首页,待处理");
+            return;
+        }
+
         Point point = OpenCvUtils.retryExec(Action.GOODS, 3);
         if (point == null) {
             throw new RuntimeException("资源物资未找到");
@@ -100,6 +75,10 @@ public class JumpChapterStrategy extends AutoStrategy {
 
         point = OpenCvUtils.findAndAction(s);
         if (point == null) {
+            return;
+        }
+
+        if (s2 == null) {
             return;
         }
 
@@ -122,6 +101,20 @@ public class JumpChapterStrategy extends AutoStrategy {
             ShellUtils.sleepTime(RandomUtils.getRandom(1, 2));
         }
         return 1;
+    }
+
+
+
+    public static JumpChapterStrategy getType() {
+
+        switch (LocalDateTime.now().toLocalDate().getDayOfWeek()) {
+            case MONDAY:
+            case WEDNESDAY:
+            case FRIDAY:
+                return JumpChapterStrategy.EXPERIENCE;
+            default:
+                return JumpChapterStrategy.MONEY;
+        }
     }
 
 }

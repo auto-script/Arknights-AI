@@ -54,10 +54,10 @@ public class Main {
           autoStrategy = new EmailStrategy();
           break;
         case 4: //经验
-          autoStrategy = new JumpChapterStrategy(1);
+          autoStrategy = JumpChapterStrategy.EXPERIENCE;
           break;
         case 5: //龙门币
-          autoStrategy = new JumpChapterStrategy(2);
+          autoStrategy = JumpChapterStrategy.MONEY;
           break;
         case 6:
           autoStrategy = new ProxyActionStrategy();

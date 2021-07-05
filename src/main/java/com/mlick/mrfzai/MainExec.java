@@ -14,7 +14,6 @@ import static com.mlick.mrfzai.utils.ShellUtils.adbPath;
  **/
 public class MainExec {
 
-
     /**
      * 记一个坑： cmd 执行时不能使用 String ... 这种泛型格式
      */
@@ -41,10 +40,9 @@ public class MainExec {
         FactoryUtil.exec(PurchasingStrategy.class);
         FactoryUtil.exec(BuildStrategy.class);
 
-
         /** 常规刷图 */
-        FactoryUtil.exec(new JumpChapterStrategy(getType()));
-        FactoryUtil.exec(ProxyActionStrategy.count(3));
+        FactoryUtil.exec(JumpChapterStrategy.getType());
+        FactoryUtil.exec(ProxyActionStrategy.maxCount(4));
 
         /** 刷活动图*/
 //        FactoryUtil.exec(ActivityHuoLanZhiXinStrategy.get("OF-7"));
@@ -67,18 +65,5 @@ public class MainExec {
         FactoryUtil.exec(BuildStrategy.class);
 
         FactoryUtil.exec(ExitNoxStrategy.class);
-    }
-
-    private static int getType() {
-
-        switch (LocalDateTime.now().toLocalDate().getDayOfWeek()) {
-            case MONDAY:
-            case WEDNESDAY:
-            case FRIDAY:
-                return 1;
-            default:
-                return 2;
-        }
-
     }
 }

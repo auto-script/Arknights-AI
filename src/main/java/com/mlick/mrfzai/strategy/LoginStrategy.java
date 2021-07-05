@@ -78,7 +78,7 @@ public class LoginStrategy extends AutoStrategy {
         OpenCvUtils.findAndAction(Action.LOGIN_PASSWORD_INPUT);
         ShellUtils.sleepTime(3);
 
-        ShellUtils.execute(adbPath, "shell", "input", "text", "301415926l");
+        ShellUtils.execute(adbPath, "shell", "input", "text", "1234567809l");
 
         OpenCvUtils.findAndAction(Action.ENTER_BTN);
 
