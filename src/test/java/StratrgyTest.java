@@ -83,7 +83,8 @@ public class StratrgyTest {
     @Test
     public void proxyStrategy() {
         ProxyActionStrategy strategy = new ProxyActionStrategy();
-        strategy.setEnergy(4);
+        strategy.setEnergy(3);
+        strategy.setMaxCount(10);
         FactoryUtil.exec(strategy);
 
         FactoryUtil.exec(ExitNoxStrategy.class);
@@ -117,7 +118,7 @@ public class StratrgyTest {
     @Test
     public void customTask() {
 
-//        comeInIndex();
+        comeInIndex();
 
         FactoryUtil.exec(JumpChapterStrategy.MONEY);
         FactoryUtil.exec(ProxyActionStrategy.energy(20));
