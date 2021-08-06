@@ -1,7 +1,6 @@
 import com.mlick.mrfzai.MainAuto;
 import com.mlick.mrfzai.core.Action;
 import com.mlick.mrfzai.core.AutoStrategy;
-import com.mlick.mrfzai.core.Constants;
 import com.mlick.mrfzai.strategy.*;
 import com.mlick.mrfzai.utils.FactoryUtil;
 import com.mlick.mrfzai.utils.NoxUtils;
@@ -9,12 +8,8 @@ import com.mlick.mrfzai.utils.OpenCvUtils;
 import com.mlick.mrfzai.utils.ShellUtils;
 import org.junit.Before;
 import org.junit.Test;
-import org.opencv.imgproc.Imgproc;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Base64;
-import java.util.Objects;
 import java.util.UUID;
 
 import static com.mlick.mrfzai.utils.ShellUtils.adbPath;
@@ -23,7 +18,7 @@ import static com.mlick.mrfzai.utils.ShellUtils.adbPath;
  * @author lixiangxin
  * @date 2019/6/11 17:29
  **/
-public class StratrgyTest {
+public class StrategyTest {
 
     @Before
     public void init() {
@@ -82,50 +77,56 @@ public class StratrgyTest {
 
     @Test
     public void proxyStrategy() {
+//        comeInIndex();
         ProxyActionStrategy strategy = new ProxyActionStrategy();
-        strategy.setEnergy(4);
+        strategy.setEnergy(10);
+//        strategy.setMaxCount(12);
+        strategy.disableSkipIndex();
+        strategy.setWaitTime(100);
         FactoryUtil.exec(strategy);
-
-        FactoryUtil.exec(ExitNoxStrategy.class);
+//        FactoryUtil.exec(ExitNoxStrategy.class);
     }
 
     @Test
     public void IWantMoreMoney() {
-        comeInIndex();
+//        comeInIndex();
 
-        FactoryUtil.exec(JumpChapterStrategy.MONEY);
-        FactoryUtil.exec(ProxyActionStrategy.energy(10));
+        FactoryUtil.exec(JumpChapterStrategy.getType());
+        FactoryUtil.exec(ProxyActionStrategy.energy(2));
 
         FactoryUtil.exec(ExitNoxStrategy.class);
     }
 
     @Test
     public void IWantExperience() {
-        comeInIndex();
+//        comeInIndex();
 
         FactoryUtil.exec(JumpChapterStrategy.EXPERIENCE);
 
-        FactoryUtil.exec(ProxyActionStrategy.energy(10));
-        FactoryUtil.exec(ExitNoxStrategy.class);
-    }
+        FactoryUtil.exec(ProxyActionStrategy.energy(1));
 
-    @Test
-    public void testJumpIndex() {
-        FactoryUtil.exec(JumpChapterStrategy.INDEX);
+//        FactoryUtil.exec(ProxyActionStrategy.class);
+
+        FactoryUtil.exec(ExitNoxStrategy.class);
     }
 
     @Test
     public void customTask() {
 
-//        comeInIndex();
-
-        FactoryUtil.exec(JumpChapterStrategy.MONEY);
-        FactoryUtil.exec(ProxyActionStrategy.energy(20));
+        comeInIndex();
 
         FactoryUtil.exec(JumpChapterStrategy.EXPERIENCE);
-        FactoryUtil.exec(ProxyActionStrategy.energy(30));
+        FactoryUtil.exec(ProxyActionStrategy.energy(3));
 
-        FactoryUtil.exec(ExitNoxStrategy.class);
+        FactoryUtil.exec(JumpChapterStrategy.MONEY);
+        FactoryUtil.exec(ProxyActionStrategy.energy(10));
+
+//        FactoryUtil.exec(ExitNoxStrategy.class);
+    }
+
+    @Test
+    public void testJumpIndex() {
+        FactoryUtil.exec(JumpChapterStrategy.INDEX);
     }
 
     /**
@@ -175,7 +176,7 @@ public class StratrgyTest {
 
         String p = "Test1234";
 
-        System.out.println(Base64.getEncoder().encodeToString(p.getBytes()));
+//        logger.info(Base64.getEncoder().encodeToString(p.getBytes()));
 
         assert u.equals(Base64.getEncoder().encodeToString(p.getBytes()));
 
@@ -231,23 +232,23 @@ public class StratrgyTest {
     }
 
 
-    @Test
-    public void t7() {
-//        String templateImg = Action.INDEX_TERMINAL.getImg();
-        Constants.FILE_TEMP_PATH = "testFile/";
-
-        Path source = Paths.get("D:\\workspace\\github\\Arknights-AI\\testFile\\2021-06-20-180439-screen.png");
-//        Path template = Paths.get("D:\\workspace\\github\\Arknights-AI\\resources\\START.png");
-//        Path template = Paths.get("D:\\workspace\\github\\Arknights-AI\\resources\\start_1.png");
-        Path template = Paths.get("D:\\workspace\\github\\Arknights-AI\\testFile\\login_account_btn5.png");
-
-        String screen = Objects.requireNonNull(source.toFile()).getAbsolutePath();
-        System.out.println(screen);
-
-        String path = Objects.requireNonNull(template.toFile()).getAbsolutePath();
-        System.out.println(path);
-
-        OpenCvUtils.findImage(screen, path, "Test", 0.65, Imgproc.TM_SQDIFF);
-    }
+//    @Test
+//    public void t7() {
+////        String templateImg = Action.INDEX_TERMINAL.getImg();
+//        Constants.FILE_TEMP_PATH = "testFile/";
+//
+//        Path source = Paths.get("D:\\workspace\\github\\Arknights-AI\\testFile\\2021-06-20-180439-screen.png");
+////        Path template = Paths.get("D:\\workspace\\github\\Arknights-AI\\resources\\START.png");
+////        Path template = Paths.get("D:\\workspace\\github\\Arknights-AI\\resources\\start_1.png");
+//        Path template = Paths.get("D:\\workspace\\github\\Arknights-AI\\testFile\\login_account_btn5.png");
+//
+//        String screen = Objects.requireNonNull(source.toFile()).getAbsolutePath();
+//        logger.info(screen);
+//
+//        String path = Objects.requireNonNull(template.toFile()).getAbsolutePath();
+//        logger.info(path);
+//
+//        OpenCvUtils.findImage(screen, path, "Test", 0.65, Imgproc.TM_SQDIFF);
+//    }
 
 }

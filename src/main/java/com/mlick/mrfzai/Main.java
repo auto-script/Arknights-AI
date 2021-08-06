@@ -72,40 +72,40 @@ public class Main {
 
   }
 
-  public static void main2(String[] args) throws IOException {
-
-    String userDir = System.getProperty("user.dir");
-    System.out.println(userDir);
-
-    System.out.println(Paths.get(userDir + "/resource").toFile().exists());
-
-    //    String path = Main.class.getResource("next_btn.png").getPath();
-    //    System.out.println("URL=>" + path);
-
-    String path1 =
-        Optional.ofNullable(Main.class.getClassLoader().getResource("next_btn.png"))
-            .map(URL::getPath)
-            .orElse("null");
-
-    System.out.println("URL1=>" + path1);
-
-    File directory = new File(""); // 参数为空
-    String courseFile = directory.getCanonicalPath(); // 标准的路径 ;
-    String author = directory.getAbsolutePath(); // 绝对路径;
-    System.out.println(courseFile);
-    System.out.println(author);
-
-//    String path = Main.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-//    System.out.println("path: " + path);
-//    JarFile localJarFile = new JarFile(new File(path));
-//    Enumeration<JarEntry> entries = localJarFile.entries();
-//    while (entries.hasMoreElements()) {
-//      JarEntry jarEntry = entries.nextElement();
-//      System.out.println("jarEntry->name=>" + jarEntry.getName());
-//    }
-
-    URL l2 = Thread.currentThread().getContextClassLoader().getResource("next_btn.png");
-
-    System.out.println("URL2=>" + l2.getPath());
-  }
+//  public static void main2(String[] args) throws IOException {
+//
+//    String userDir = System.getProperty("user.dir");
+//    logger.info(userDir);
+//
+//    logger.info(Paths.get(userDir + "/resource").toFile().exists());
+//
+//    //    String path = Main.class.getResource("next_btn.png").getPath();
+//    //    logger.info("URL=>" + path);
+//
+//    String path1 =
+//        Optional.ofNullable(Main.class.getClassLoader().getResource("next_btn.png"))
+//            .map(URL::getPath)
+//            .orElse("null");
+//
+//    logger.info("URL1=>" + path1);
+//
+//    File directory = new File(""); // 参数为空
+//    String courseFile = directory.getCanonicalPath(); // 标准的路径 ;
+//    String author = directory.getAbsolutePath(); // 绝对路径;
+//    logger.info(courseFile);
+//    logger.info(author);
+//
+////    String path = Main.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+////    logger.info("path: " + path);
+////    JarFile localJarFile = new JarFile(new File(path));
+////    Enumeration<JarEntry> entries = localJarFile.entries();
+////    while (entries.hasMoreElements()) {
+////      JarEntry jarEntry = entries.nextElement();
+////      logger.info("jarEntry->name=>" + jarEntry.getName());
+////    }
+//
+//    URL l2 = Thread.currentThread().getContextClassLoader().getResource("next_btn.png");
+//
+//    logger.info("URL2=>" + l2.getPath());
+//  }
 }

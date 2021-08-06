@@ -3,6 +3,8 @@ package com.mlick.mrfzai.strategy;
 import com.mlick.mrfzai.core.AutoStrategy;
 import com.mlick.mrfzai.utils.NoxUtils;
 import com.mlick.mrfzai.utils.ShellUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static com.mlick.mrfzai.utils.ShellUtils.adbPath;
 
@@ -12,6 +14,8 @@ import static com.mlick.mrfzai.utils.ShellUtils.adbPath;
  **/
 public class ExitNoxStrategy extends AutoStrategy {
 
+    private static Logger logger = LoggerFactory.getLogger(ExitNoxStrategy.class);
+
     @Override
     public void exec() {
         ShellUtils.executeByResult(
@@ -19,7 +23,7 @@ public class ExitNoxStrategy extends AutoStrategy {
 
         NoxUtils.shutDown();
 
-        System.out.println("Exit System!!!");
+        logger.info("Exit System!!!");
 
         System.exit(0);
         

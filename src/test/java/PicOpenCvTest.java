@@ -39,7 +39,7 @@ public class PicOpenCvTest {
 //        String filename = "C:\\Users\\Administrator\\Desktop\\161272e10062b204.png";
 //        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 //        Mat mat = Mat.eye(3, 3, CvType.CV_8UC1);
-//        System.out.println("mat = " + mat.dump());
+//        logger.info("mat = " + mat.dump());
 //    }
 
     @Test
@@ -78,60 +78,60 @@ public class PicOpenCvTest {
         Imgcodecs.imwrite("C:\\Users\\xiangxin.li\\Pictures\\arknginths\\match.jpg", g_src);
     }
 
-    public static void main2(String[] args) {
-
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        Mat source = null;
-        Mat template = null;
-        String filePath = "D:\\tmp\\";
-        //Load image file
-
-        source = Imgcodecs.imread(filePath + "screen3_1.png");
-        template = Imgcodecs.imread(filePath + "START.png");
-
-//    source = Imgcodecs.imread(filePath + "login.png");
-//    template = Imgcodecs.imread(filePath + "start-wake.png");
-//    template = Imgcodecs.imread(filePath + "start-screan.png");
-
-//    Mat outputImage = new Mat();
-        // / Create the result matrix
-        int result_cols = source.cols() - template.cols() + 1;
-        int result_rows = source.rows() - template.rows() + 1;
-        Mat outputImage = new Mat(result_rows, result_cols, CvType.CV_32FC1);
-
-//    int machMethod = Imgproc.TM_CCOEFF;
-//    int machMethod = Imgproc.TM_CCORR;
-//    int machMethod = Imgproc.TM_CCORR_NORMED; // 归一化平方差匹配法
-        int machMethod = Imgproc.TM_SQDIFF; // 差值平方和匹配
-        //Template matching method
-        Imgproc.matchTemplate(source, template, outputImage, machMethod);
-
-        Core.MinMaxLocResult mmr = Core.minMaxLoc(outputImage);
-
-        System.out.println(mmr.minVal + " " + mmr.maxVal);
-        System.out.println(mmr.minLoc.x + " " + mmr.minLoc.y);
-        //  min  x=683.0 y=331.0
-        //  max  x=607.0 y=649.0
-        System.out.println(mmr.maxLoc.x + " " + mmr.maxLoc.y);
-        System.out.println((mmr.maxLoc.x + template.width() / 2.0f) + " " + (mmr.maxLoc.y + template.height() / 2.0f));
-        System.out.println((mmr.maxLoc.x + template.cols() / 2.0f) + " " + (mmr.maxLoc.y + template.rows() / 2.0f));
-        System.out.println((mmr.maxLoc.x + template.width()) + " " + (mmr.maxLoc.y + template.height()));
-
-        Point matchLoc;
-        if (machMethod == Imgproc.TM_SQDIFF
-                || machMethod == Imgproc.TM_SQDIFF_NORMED) {
-            matchLoc = mmr.minLoc;
-            System.out.println(mmr.minVal);
-        } else {
-            matchLoc = mmr.maxLoc;
-            System.out.println(mmr.maxVal);
-        }
-
-        //Draw rectangle on result image
-        Imgproc.rectangle(source, matchLoc, new Point(matchLoc.x + template.cols(),
-                                                      matchLoc.y + template.rows()), new Scalar(0, 255, 0));
-
-        Imgcodecs.imwrite(filePath + "sonuc6.jpg", source);
-        System.out.println("Complated.");
-    }
+//    public static void main2(String[] args) {
+//
+//        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+//        Mat source = null;
+//        Mat template = null;
+//        String filePath = "D:\\tmp\\";
+//        //Load image file
+//
+//        source = Imgcodecs.imread(filePath + "screen3_1.png");
+//        template = Imgcodecs.imread(filePath + "START.png");
+//
+////    source = Imgcodecs.imread(filePath + "login.png");
+////    template = Imgcodecs.imread(filePath + "start-wake.png");
+////    template = Imgcodecs.imread(filePath + "start-screan.png");
+//
+////    Mat outputImage = new Mat();
+//        // / Create the result matrix
+//        int result_cols = source.cols() - template.cols() + 1;
+//        int result_rows = source.rows() - template.rows() + 1;
+//        Mat outputImage = new Mat(result_rows, result_cols, CvType.CV_32FC1);
+//
+////    int machMethod = Imgproc.TM_CCOEFF;
+////    int machMethod = Imgproc.TM_CCORR;
+////    int machMethod = Imgproc.TM_CCORR_NORMED; // 归一化平方差匹配法
+//        int machMethod = Imgproc.TM_SQDIFF; // 差值平方和匹配
+//        //Template matching method
+//        Imgproc.matchTemplate(source, template, outputImage, machMethod);
+//
+//        Core.MinMaxLocResult mmr = Core.minMaxLoc(outputImage);
+//
+//        logger.info(mmr.minVal + " " + mmr.maxVal);
+//        logger.info(mmr.minLoc.x + " " + mmr.minLoc.y);
+//        //  min  x=683.0 y=331.0
+//        //  max  x=607.0 y=649.0
+//        logger.info(mmr.maxLoc.x + " " + mmr.maxLoc.y);
+//        logger.info((mmr.maxLoc.x + template.width() / 2.0f) + " " + (mmr.maxLoc.y + template.height() / 2.0f));
+//        logger.info((mmr.maxLoc.x + template.cols() / 2.0f) + " " + (mmr.maxLoc.y + template.rows() / 2.0f));
+//        logger.info((mmr.maxLoc.x + template.width()) + " " + (mmr.maxLoc.y + template.height()));
+//
+//        Point matchLoc;
+//        if (machMethod == Imgproc.TM_SQDIFF
+//                || machMethod == Imgproc.TM_SQDIFF_NORMED) {
+//            matchLoc = mmr.minLoc;
+//            logger.info(mmr.minVal);
+//        } else {
+//            matchLoc = mmr.maxLoc;
+//            logger.info(mmr.maxVal);
+//        }
+//
+//        //Draw rectangle on result image
+//        Imgproc.rectangle(source, matchLoc, new Point(matchLoc.x + template.cols(),
+//                                                      matchLoc.y + template.rows()), new Scalar(0, 255, 0));
+//
+//        Imgcodecs.imwrite(filePath + "sonuc6.jpg", source);
+//        logger.info("Complated.");
+//    }
 }

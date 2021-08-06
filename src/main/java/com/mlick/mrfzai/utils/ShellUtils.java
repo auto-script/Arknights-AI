@@ -2,6 +2,8 @@ package com.mlick.mrfzai.utils;
 
 import com.mlick.mrfzai.core.Constants;
 import org.opencv.core.Point;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -19,10 +21,12 @@ import static com.mlick.mrfzai.core.Constants.FILE_TEMP_PATH;
  **/
 public class ShellUtils {
 
+    private static Logger logger = LoggerFactory.getLogger(ShellUtils.class);
+
     private ShellUtils() {
     }
 
-    public static String adbPath = Paths.get("resources/adb/%s.exe").toFile().getAbsolutePath();
+    public static String adbPath = Paths.get("res/adb/%s.exe").toFile().getAbsolutePath();
 
 
     public static void screenCap() {
@@ -38,7 +42,7 @@ public class ShellUtils {
 
     public static synchronized void screenCap(String saveFile) throws IOException {
         checkFileMore();
-        boolean result = execute(adbPath, "shell", "screencap", "-p", "/sdcard/screen.png");
+        boolean result = execute(false, adbPath, "shell", "screencap", "-p", "/sdcard/screen.png");
         if (!result) {
             throw new RuntimeException("手机分辨率检测失败，请检查电脑与手机连接和手机设置。");
         }
@@ -50,7 +54,7 @@ public class ShellUtils {
             return;
         }
 
-        System.out.println("pull screen.png success:" + pullFile.getAbsolutePath());
+//        logger.info("pull screen.png success:" + pullFile.getAbsolutePath());
 
         BufferedImage src = ImageIO.read(new FileInputStream(pullFile));
         if (src.getWidth() >= src.getHeight()) {
@@ -73,7 +77,7 @@ public class ShellUtils {
         if (files == null || files.length == 0) {
             return;
         }
-        
+
         // 按照最新修改的倒序排序
         Arrays.sort(files, (f1, f2) -> {
             long diff = f1.lastModified() - f2.lastModified();
@@ -90,10 +94,6 @@ public class ShellUtils {
         }
     }
 
-    public static void main(String[] args) {
-        checkFileMore();
-    }
-
     public static ArrayList<String> getConnectedDevices() {
         ArrayList<String> devices = new ArrayList<>();
         try {
@@ -103,7 +103,7 @@ public class ShellUtils {
             boolean startCount = false;
             String deviceName;
             while ((line = reader.readLine()) != null) {
-                System.out.println(line);
+                logger.info(line);
                 if (line.contains("List of devices attached")) {
                     startCount = true;
                 } else if (startCount && !line.trim().isEmpty()
@@ -164,7 +164,7 @@ public class ShellUtils {
      * @return
      */
     public static List<String> executeByResult(String... cmd) {
-        System.out.println("==>" + Arrays.toString(cmd).replaceAll(",", " "));
+        logger.debug("==>" + Arrays.toString(cmd).replaceAll(",", " "));
         try {
             Process p = Runtime.getRuntime().exec(cmd);
             return readSuccess(p);
@@ -175,10 +175,19 @@ public class ShellUtils {
         return null;
     }
 
-    public static List<String> executeCmdByResult(String cmd) {
-        System.out.println("==>" + cmd);
+    public static void executeCmd(String cmd) {
+        logger.debug("==>" + cmd);
         try {
+            Runtime runtime = Runtime.getRuntime();
+            runtime.exec(cmd);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
+    public static List<String> executeCmdByResult(String cmd) {
+        logger.debug("==>" + cmd);
+        try {
             Runtime runtime = Runtime.getRuntime();
             Process p = runtime.exec("cmd /c " + cmd);
 //      Process p = Runtime.getRuntime().exec(cmd);
@@ -200,7 +209,7 @@ public class ShellUtils {
         if (point == null) {
             return false;
         }
-        return execute(true, adbPath, "shell", getTapPhone(point));
+        return execute(false, adbPath, "shell", getTapPhone(point));
     }
 
     public static boolean executePoint(Point point, boolean flag) {
@@ -224,14 +233,14 @@ public class ShellUtils {
 
     public static boolean execute(boolean show, String... cmd) {
         if (show) {
-            System.out.println(Arrays.toString(cmd).replaceAll(",", ""));
+            logger.info(Arrays.toString(cmd).replaceAll(",", ""));
         }
 
         try {
             Process process = Runtime.getRuntime().exec(cmd);
             int result = process.waitFor();
             if (result != 0) {
-                System.out.println("Failed to execute \"" + Arrays.toString(cmd) + "\", result code is " + result);
+                logger.info("Failed to execute \"" + Arrays.toString(cmd) + "\", result code is " + result);
             } else {
                 return true;
             }
@@ -259,20 +268,31 @@ public class ShellUtils {
     /**
      * 等待时间
      *
-     * @param i 等待时间数 单位为秒
+     * @param n 等待时间数 单位为秒
      */
-    public static void sleepTime(int i) {
-        try {
-            String ctx = "等待==>" + i + "s";
+    public static void sleepTime(boolean show, int n) {
+        if (show) {
+            String ctx = "等待==>[" + n + "s]";
             System.out.println(ctx);
-            TimeUnit.SECONDS.sleep(i + 1);
+        }
+
+        try {
+            TimeUnit.SECONDS.sleep(n);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 
+    public static void sleepTime(int i) {
+        sleepTime(true, i);
+    }
 
     public static void sleepTime() {
         sleepTime(Constants.SLEEP_TIME);
     }
+
+    public static void main(String[] args) {
+        sleepTime(100);
+    }
+
 }

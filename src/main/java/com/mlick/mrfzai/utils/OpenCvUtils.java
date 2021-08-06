@@ -5,6 +5,8 @@ import com.mlick.mrfzai.core.Constants;
 import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.nio.file.Paths;
 import java.util.Objects;
@@ -17,6 +19,9 @@ import static com.mlick.mrfzai.core.Constants.FILE_TEMP_PATH;
  * @date 2019/6/4 14:30
  **/
 public class OpenCvUtils {
+
+
+    private static Logger logger = LoggerFactory.getLogger(OpenCvUtils.class);
 
     static {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
@@ -60,7 +65,7 @@ public class OpenCvUtils {
     }
 
     public static Point findStartWake() {
-        return findImage(START_WAKE);
+        return retryExec(START_WAKE, 3);
     }
 
     public static Point findEmail() {
@@ -166,7 +171,7 @@ public class OpenCvUtils {
             ShellUtils.screenCap();
         }
 
-        String templatePath = Objects.requireNonNull(Paths.get("resources/" + templateImg).toFile()).getAbsolutePath();
+        String templatePath = Objects.requireNonNull(Paths.get("res/" + templateImg).toFile()).getAbsolutePath();
         String sourcePath = Objects.requireNonNull(Paths.get(FILE_TEMP_PATH + Constants.screenPath).toFile())
                 .getAbsolutePath();
 
@@ -175,16 +180,18 @@ public class OpenCvUtils {
 
     public static Point findImage(String sourceImg, String templateImg, String desc, double expect, int intMatchingMethod) {
 
-        System.out.println(String.format("source  =>[%s]", sourceImg));
-        System.out.println(String.format("template=>[%s]", templateImg));
+        String sourceMsg = String.format("source  =>[%s]", sourceImg);
+        String templateMsg = String.format("template=>[%s]", templateImg);
+        logger.debug(sourceMsg);
+        logger.debug(templateMsg);
 
         Mat sourceMat = Imgcodecs.imread(sourceImg);
         Mat templateMat = Imgcodecs.imread(templateImg);
 
         if (sourceMat.width() < templateMat.width() || sourceMat.height() < templateMat.height()) {
-            System.err.println("The template image is larger than the source image. Ensure that the width and/or " +
-                                       "height of " +
-                                       "the image you are trying to find do not exceed the dimensions of the source image.");
+            logger.error("The template image is larger than the source image. Ensure that the width and/or " +
+                                 "height of " +
+                                 "the image you are trying to find do not exceed the dimensions of the source image.");
             return null;
         }
 
@@ -203,10 +210,12 @@ public class OpenCvUtils {
         Imgproc.matchTemplate(sourceMat, templateMat, result, intMatchingMethod);
         Core.MinMaxLocResult minMaxLocRes = Core.minMaxLoc(result);
 
-        System.out.println("MaxAccuracy:" + minMaxLocRes.maxVal + " MinAccuracy:" + minMaxLocRes.minVal);
+
+        String resultMsg = "MaxAccuracy:" + minMaxLocRes.maxVal + " MinAccuracy:" + minMaxLocRes.minVal;
+        logger.debug(resultMsg);
 
         if (!minMaxLocResultIsValid(minMaxLocRes)) {
-            System.out.println(
+            logger.error(
                     "Image find result (MinMaxLocResult) was invalid. This usually happens when the source image is " +
                             "covered in " +
                             "one solid color.");
@@ -225,11 +234,11 @@ public class OpenCvUtils {
 
         if (isExpect && minMaxLocRes.maxVal < expect) {
             ShellUtils.sleepTime(1);
-            System.err.println("【" + desc + "】未找到");
+            logger.error("【" + desc + "】未找到");
             ShellUtils.sleepTime(1);
             return null;
         }
-        System.out.println("成功找到【" + desc + "】");
+        logger.info("成功找到【" + desc + "】");
 
         String resultImgFile = FILE_TEMP_PATH + getResultFileName(minMaxLocRes.maxVal);
         Imgproc.rectangle(sourceMat, matchLocation,
@@ -304,6 +313,10 @@ public class OpenCvUtils {
         return point;
     }
 
+    public static Point loopFind(Action img, int count) {
+        return loopFind(img.getImg(), count);
+    }
+
     public static Point isNullFindAndAction(Point point, String tmp) {
         if (point != null) {
             return point;
@@ -314,17 +327,17 @@ public class OpenCvUtils {
 
     public static Point retryExec(Action action, int count) {
         for (int i = 0; i < count; i++) {
-            if (i == 1){
-                System.out.println("即将循环查找" + count + "次");
+            if (i == 1) {
+                logger.info("即将循环查找" + count + "次");
             }
             Point point = OpenCvUtils.findAndAction(action);
             if (point != null) {
                 return point;
             }
-            System.out.println("循环查找第:" + (i + 1) + "次");
+            logger.info("循环查找第:" + (i + 1) + "次");
             ShellUtils.sleepTime();
         }
-        System.err.println(String.format("【%s】循环%d次后，未找到,待处理", action.getName(), count));
+        logger.error(String.format("【%s】循环%d次后，未找到,待处理", action.getName(), count));
         return null;
     }
 

@@ -28,11 +28,11 @@ public class ArkNightsJob implements Job {
 
     switch (flag) {
       case 1:
-        System.out.println("执行 基站");
+        logger.info("执行 基站");
 
         break;
       case 2:
-        System.out.println("执行 经验 金币");
+        logger.info("执行 经验 金币");
         break;
       default:
         break;

@@ -21,7 +21,7 @@ public enum Action {
     YES_2("next_btn", "灰底确认"),
     YES_3("next_white_btn", "白底确认"),
     YES_4("next_black", "黑底确认"),
-    EXIT_1("exit_btn", "灰底关闭"),
+    EXIT_1("exit_btn", "灰底关闭","exit_btn_2"),
     CLOSE_4("exit_black", "黑底关闭"),
     CONTINUE_SUBMIT("continue_submit", "继续结算"),
     JI_YI_MO_HU("jiyimohu", "记忆已经模糊，请重新输入登录信息"),
@@ -47,6 +47,7 @@ public enum Action {
 
     HOME("home","顶部首页"),
     HOME_INDEX("home_index","顶部首页跳转"),
+    DAY_TASK_GOODS("day_task_goods","今日物资"),
 
     CE_5("CE-5", "CE-5"),
     LS_5("LS-5", "LS-5", "LS-5_u"),

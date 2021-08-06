@@ -5,6 +5,8 @@ import com.mlick.mrfzai.core.AutoStrategy;
 import com.mlick.mrfzai.utils.OpenCvUtils;
 import com.mlick.mrfzai.utils.ShellUtils;
 import org.opencv.core.Point;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.TimeUnit;
 
@@ -15,6 +17,8 @@ import java.util.concurrent.TimeUnit;
  **/
 @SuppressWarnings("InfiniteLoopStatement")
 public class BuildStrategy extends AutoStrategy {
+
+  private static Logger logger = LoggerFactory.getLogger(BuildStrategy.class);
 
   private int max = 1;
 
@@ -39,7 +43,7 @@ public class BuildStrategy extends AutoStrategy {
       task();
 
       if (max > 0) {
-        System.out.println("等待十分钟...");
+        logger.info("等待十分钟...");
         try {
           TimeUnit.MINUTES.sleep(10);
         } catch (InterruptedException e) {

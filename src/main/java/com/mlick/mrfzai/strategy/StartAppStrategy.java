@@ -6,6 +6,8 @@ import com.mlick.mrfzai.core.Constants;
 import com.mlick.mrfzai.utils.OpenCvUtils;
 import com.mlick.mrfzai.utils.ShellUtils;
 import org.opencv.core.Point;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static com.mlick.mrfzai.utils.ShellUtils.adbPath;
 
@@ -15,25 +17,25 @@ import static com.mlick.mrfzai.utils.ShellUtils.adbPath;
  **/
 public class StartAppStrategy extends AutoStrategy {
 
+    private static Logger logger = LoggerFactory.getLogger(StartAppStrategy.class);
+
     @Override
     public void exec() {
 
+        logger.info("启动APP...[{}s]", 15);
         // 包名 + 启动类名
-        ShellUtils.executeByResult(
-                adbPath, "shell", "am start -n com.hypergryph.arknights/com.u8.sdk.U8UnityContext");
-        ShellUtils.sleepTime(15);
-
+        ShellUtils.executeByResult(adbPath, "shell", "am start -n com.hypergryph.arknights/com.u8.sdk.U8UnityContext");
+        ShellUtils.sleepTime(false, 15);
         // 点击开始 按钮
         OpenCvUtils.retryExec(Action.START, 2);
 
         ShellUtils.sleepTime(15);
 
-
         // 检测是否已经登录过
 
         Point startWake = OpenCvUtils.findStartWake();
-        if (startWake != null){
-            System.out.println("成功启动");
+        if (startWake != null) {
+            logger.info("成功启动");
             return;
         }
 
@@ -42,12 +44,12 @@ public class StartAppStrategy extends AutoStrategy {
         if (nextWhiteAction != null) {
             ShellUtils.executePoint(nextWhiteAction);
         } else if (OpenCvUtils.findImage(Action.LOGIN_ACCOUNT_BTN) != null) {
-            System.out.println("成功启动");
+            logger.info("成功启动");
             return;
         }
 
         OpenCvUtils.findAndAction(Action.START);
-        System.out.println("启动有异常,待处理!");
+        logger.info("启动有异常,待处理!");
 
         ShellUtils.sleepTime(5);
     }

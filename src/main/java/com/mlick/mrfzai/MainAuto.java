@@ -1,20 +1,13 @@
 package com.mlick.mrfzai;
 
-import com.mlick.mrfzai.core.AutoStrategy;
 import com.mlick.mrfzai.quartz.QuartzManager;
 import com.mlick.mrfzai.quartz.job.ArkNightsJob;
-import com.mlick.mrfzai.strategy.*;
-import com.mlick.mrfzai.utils.FactoryUtil;
 import com.mlick.mrfzai.utils.ShellUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.Scanner;
 
 import static com.mlick.mrfzai.utils.ShellUtils.adbPath;
 
@@ -24,6 +17,7 @@ import static com.mlick.mrfzai.utils.ShellUtils.adbPath;
  */
 @SuppressWarnings("AlibabaRemoveCommentedCode")
 public class MainAuto {
+    private static Logger logger = LoggerFactory.getLogger(MainAuto.class);
 
     public static void main(String[] args) {
 
@@ -48,7 +42,7 @@ public class MainAuto {
 
         ArrayList<String> connectedDevices = ShellUtils.getConnectedDevices();
         if (connectedDevices.isEmpty()) {
-            System.out.println("devices is empty");
+            logger.info("devices is empty");
 
             ShellUtils.executeByResult(adbPath, "connect 127.0.0.1:62001");
         }
@@ -58,7 +52,7 @@ public class MainAuto {
             for (int i = 2; i < size; i++) {
                 String item = connectedDevices.get(i);
                 String port = item.split("-")[1].split(" ")[0];
-                System.out.println(port);
+                logger.info(port);
                 List<String> results = ShellUtils.executeByResult("netstat -ano|findstr " + port);
                 if (results != null && !results.isEmpty()) {
                     results.forEach(s -> {

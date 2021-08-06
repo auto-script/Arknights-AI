@@ -27,10 +27,15 @@ public class JumpChapterStrategy extends AutoStrategy {
     }
 
     private enum TYPE {
-        INDEX,
-        MONEY,
-        EXPERIENCE,
-        BUILDING
+        INDEX("首页"),
+        MONEY("龙门币"),
+        EXPERIENCE("经验"),
+        BUILDING("基建");
+
+        final String nameCn;
+        TYPE(String name) {
+            this.nameCn = name;
+        }
     }
 
     public JumpChapterStrategy(TYPE i) {
@@ -43,6 +48,7 @@ public class JumpChapterStrategy extends AutoStrategy {
         ShellUtils.sleepTime();
         switch (type) {
             case INDEX:
+                log.info("进人{}",type.nameCn);
                 OpenCvUtils.findAndAction(Action.HOME);
                 ShellUtils.sleepTime(1);
                 OpenCvUtils.findAndAction(Action.HOME_INDEX);

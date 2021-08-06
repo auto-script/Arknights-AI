@@ -24,7 +24,7 @@ public class EmailStrategy extends AutoStrategy {
         OpenCvUtils.loopFind("back_white_btn.png");
 
 
-//    System.out.println("删除所有已读邮件");
+//    logger.info("删除所有已读邮件");
 //    ShellUtils.executePoint(OpenCvUtils.findDeleteEmail());
 
     }

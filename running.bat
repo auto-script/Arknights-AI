@@ -1,1 +1,1 @@
-java -jar ./build/libs/Arknights-AI-0.0.2.jar
+java -jar ./build/libs/Arknights-AI-1.0.0.jar

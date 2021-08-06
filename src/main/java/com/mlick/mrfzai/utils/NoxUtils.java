@@ -1,5 +1,8 @@
 package com.mlick.mrfzai.utils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.List;
 
 /**
@@ -8,11 +11,11 @@ import java.util.List;
  **/
 public class NoxUtils {
 
+    private static Logger logger = LoggerFactory.getLogger(NoxUtils.class);
+
     public static void startUp() {
-        new Thread(() -> {
-            ShellUtils.executeCmdByResult("\"D:\\Program Files\\Nox\\bin\\Nox.exe\" -clone:nox -startPackage:com.hypergryph.arknights");
-            System.out.println("exec finish");
-        }).start();
+        ShellUtils.executeCmd("cmd /k \"D:\\Program Files\\Nox\\bin\\Nox.exe\" -clone:nox -startPackage:com.hypergryph.arknights");
+        logger.info("exec finish");
     }
 
     public static void shutDown() {

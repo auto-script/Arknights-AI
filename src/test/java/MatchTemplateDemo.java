@@ -17,12 +17,16 @@ import org.opencv.core.Scalar;
 import org.opencv.highgui.HighGui;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author lixiangxin
  * @date 2021/6/20 21:30
  **/
 class MatchTemplateDemoRun implements ChangeListener {
+
+    private static Logger logger = LoggerFactory.getLogger(MatchTemplateDemo.class);
 
     //! [declare]
     /// Global Variables
@@ -37,8 +41,8 @@ class MatchTemplateDemoRun implements ChangeListener {
 
     public void run(String[] args) {
         if (args.length < 2) {
-            System.out.println("Not enough parameters");
-            System.out.println("Program arguments:\n<image_name> <template_name> [<mask_name>]");
+            logger.info("Not enough parameters");
+            logger.info("Program arguments:\n<image_name> <template_name> [<mask_name>]");
             System.exit(-1);
         }
 
@@ -54,7 +58,7 @@ class MatchTemplateDemoRun implements ChangeListener {
         }
 
         if (img.empty() || templ.empty() || (use_mask && mask.empty())) {
-            System.out.println("Can't read one of the images");
+            logger.info("Can't read one of the images");
             System.exit(-1);
         }
 
@@ -110,9 +114,9 @@ class MatchTemplateDemoRun implements ChangeListener {
         }
         //! [match_loc]
 
-        System.out.println("matchMethod:" + match_method);
-        System.out.println("MaxAccuracy:" + mmr.maxVal);
-        System.out.println("MinAccuracy:" + mmr.minVal);
+        logger.info("matchMethod:" + match_method);
+        logger.info("MaxAccuracy:" + mmr.maxVal);
+        logger.info("MinAccuracy:" + mmr.minVal);
 
         //! [imshow]
         /// Show me what you got
